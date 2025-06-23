@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  n8n:
+    build: . # Docker will build the image from Dockerfile in the current directory
+    container_name: my_n8n_instance_with_netmiko
+    ports:
+      - '5678:5678'
+    volumes:
+      - n8n_data:/home/node/.n8n
+      # If your Python scripts are mounted, add this line (assuming scripts are in a folder named 'scripts' next to docker-compose.yml)
+      # - ./scripts:/usr/src/app/scripts
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-user}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-password}
+      # --- IMPORTANT: For Production Webhooks to work correctly on a public domain ---
+      # - WEBHOOK_URL=https://your.n8n.domain.com/ # Uncomment and set your public domain if applicable
+      - OPENROUTE_API_KEY=${OPENROUTE_API_KEY} # Add OpenRouteService API key
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}      # Add Google API key
+      - DISCORD_API_KEY=${DISCORD_API_KEY}     # Add Discord API key
+      - NGROK_PUBLIC_URL=${NGROK_PUBLIC_URL:-}
+      
+    extra_hosts:
+      - "host.docker.internal:host-gateway" # <--- ADD THIS LINE
+    # --- Alternative (Less Recommended) if host.docker.internal doesn't work, particularly on older Linux Docker Engine ---
+    # network_mode: "host" # <--- UNCOMMENT THIS LINE AND REMOVE 'ports' AND 'extra_hosts' IF YOU USE THIS ALTERNATIVE
+      
+volumes:
+  n8n_data:
