@@ -1,0 +1,1539 @@
+{
+  "name": "KML GEN TOOL",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0",
+          "mode": "list",
+          "cachedResultName": "Tạo tuyến cáp kml",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "cable_gen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        220,
+        900
+      ],
+      "id": "d853d694-befd-44dc-8070-cfdc4c96c5d6",
+      "name": "Google Sheets3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/line_kml_tmp.py"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        900
+      ],
+      "id": "5af0add1-6054-4f80-8cca-3ffad472b3e7",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Node này nằm sau Google Sheets, trước Code ghi file tạm.\n// Đặt tên: \"Prepare_Pure_JSON_for_Python\"\n\n// Lấy tất cả các item đầu vào từ node trước đó (ví dụ: Google Sheets)\nconst allN8nItems = $input.all();\n\n// Tạo một mảng mới chỉ chứa các đối tượng JSON thuần túy\n// Loại bỏ các metadata của n8n như \"pairedItem\"\nconst pureJsonData = allN8nItems.map(item => item.json);\n\n// Trả về mảng các đối tượng JSON thuần túy này.\n// Node Code tiếp theo (ghi file tạm) sẽ nhận cấu trúc này.\nreturn [{\n    json: {\n        rawData: pureJsonData, // Đặt tên biến để dễ truy cập sau này\n        // Giữ lại các biến context khác từ item đầu tiên nếu cần\n\n        // ...\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        900
+      ],
+      "id": "1d03ac92-4162-48cd-98be-51337681eb3c",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        900
+      ],
+      "id": "27e7634b-9b9a-4cef-ab21-30ec9c062891",
+      "name": "Convert to File2"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/tmp/output.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        880,
+        900
+      ],
+      "id": "80196b8c-8a52-4309-9031-c93a79ed12c4",
+      "name": "Read/Write Files from Disk2"
+    },
+    {
+      "parameters": {
+        "content": "## TẠO TUYÊN CÁP",
+        "height": 340,
+        "width": 2860
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        760
+      ],
+      "typeVersion": 1,
+      "id": "88837ec6-dbad-4a5b-bd2c-968863a0ee86",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const commandResultItem = $input.first();\n\n// Lấy thông tin từ Execute Command Node\n\nconst rawStdout = $input.first().json.parsedData.kmlContent || ''; // \n\n// Lấy thông tin ngữ cảnh từ các node trước đó (giả sử có sẵn trong input của Node Code này)\n\nconst routerName = commandResultItem.json.Router_name || \"ThietBiKhongXacDinh\"; // Lấy từ inputData gốc\n\nconst routerIP = commandResultItem.json.IP || \"N/A\";\n\nconst routerVendor = commandResultItem.json.Vendor || \"unknown\"; // Vendor từ inputData gốc\n\nlet routerConfigContent = ''; // Biến để lưu nội dung cấu hình đã làm sạch\n\nlet scriptSuccess = false;   // Cờ thành công từ script Python\n\nlet scriptError = null;      // Lỗi từ script Python\n\n// --- BƯỚC 1: Parse stdout từ Execute Command ---\n\nif (rawStdout) {\n\n    try { \n\n\n\n        if (rawStdout) {\n\n            routerConfigContent = rawStdout;\n\n            // --- BƯỚC 2: LÀM SẠCH NỘI DUNG CẤU HÌNH ---\n\n            // Thay thế '\\\\n' thành '\\n' (dấu xuống dòng thực sự)\n\n            // Thay thế '\\\\\"' thành '\"' (dấu nháy kép thực sự)\n\n            routerConfigContent = routerConfigContent.replace(/\\\\n/g, '\\n').replace(/\\\\\"/g, '\"');\n\n            \n\n            // Xử lý thêm các ký tự escape khác nếu cần (ví dụ: \\\\t -> \\t, \\\\r -> \\r)\n\n            // routerConfigContent = routerConfigContent.replace(/\\\\t/g, '\\t').replace(/\\\\r/g, '\\r');\n\n            \n\n            // Một số output có thể bắt đầu hoặc kết thúc với khoảng trắng, trim nó\n\n            routerConfigContent = routerConfigContent.trim();\n\n        } else {\n\n            routerConfigContent = \"Không có nội dung cấu hình từ script Python.\";\n\n        }\n\n    } catch (e) {\n\n        // Lỗi khi parse JSON từ stdout\n\n        scriptSuccess = false;\n\n        scriptError = `Lỗi phân tích JSON từ Netmiko script: ${e.message}. Raw stdout:\\n ${rawStdout}`;\n\n        routerConfigContent = `Lỗi: ${scriptError}`; // Ghi lỗi vào nội dung file\n\n    }\n\n} else {\n\n    routerConfigContent = \"Không có đầu ra nào từ lệnh Netmiko.\";\n\n    scriptSuccess = false;\n\n}\n\n\n\n// --- BƯỚC 3: Tạo tên file cấu hình độc đáo và hợp lệ ---\n\n\nconst timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/[^0-9a-zA-Z]/g, '_');\n\n\n\n// Định dạng tên file: ROUTERNAME_VENDOR_alarm_YYYY_MM_DD_HH_MM_SS.cfg\n\nconst fileName = `line_kml_${timestamp}.kml`;\n\n\n// --- BƯỚC 4: Tạo nội dung file hoàn chỉnh (header + cấu hình) ---\n\nlet finalFileContent =  routerConfigContent;\n\n\n\n// --- BƯỚC 5: Chuyển nội dung file thành Binary Data (Base64) ---\n\nconst fileContentBase64 = Buffer.from(finalFileContent, 'utf8').toString('base64');\n\n\n\n// --- BƯỚC 6: Trả về Item với Binary Data Structure cho Google Drive ---\n\nreturn [{\n\n    json: {\n\n        fileName: fileName,\n        timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }),\n\n        mimeType: \"text/plain\", // File cấu hình thường là text/plain\n\n        // Các thông tin gốc từ input để truyền tiếp\n\n          // Giữ lại stderr\n     \n    },\n\n    binary: { // <--- Đây là phần quan trọng để đính kèm file\n\n        data: {\n\n            data: fileContentBase64, // Dữ liệu file đã mã hóa base64\n\n            fileName: fileName,      // Tên file (lặp lại)\n\n            mimeType: \"text/plain\",  // Loại file (lặp lại)\n\n        }\n\n    }\n\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        900
+      ],
+      "id": "77d1efbe-b4d7-47c2-b2ea-a74ce2927502",
+      "name": "Tạo file bin1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData, originalString: jsonString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        900
+      ],
+      "id": "a20f0000-1f1c-402a-9366-b154ff4bee57",
+      "name": "parse json1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0",
+          "mode": "list",
+          "cachedResultName": "Tạo tuyến cáp kml",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1429268105,
+          "mode": "list",
+          "cachedResultName": "result",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit#gid=1429268105"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.name }}",
+            "Kml download": "={{ $json.webContentLink }}",
+            "Timestamp": "={{ $json.createdTime }}",
+            "User": "={{ $json.triggerEmail }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Kml download",
+              "displayName": "Kml download",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2500,
+        920
+      ],
+      "id": "0979ff63-5a7c-4f99-8b7a-24f4e220d1e8",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2260,
+        920
+      ],
+      "id": "85b8e3a7-4d92-44b3-ad42-168066976bfa",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "name": "={{ $json.fileName }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "13xQ8CQfGG5afG7TaNiL_k4IZhSUHt8Tu",
+          "mode": "list",
+          "cachedResultName": "KML GEN ",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/13xQ8CQfGG5afG7TaNiL_k4IZhSUHt8Tu"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1800,
+        800
+      ],
+      "id": "4229443a-f593-4537-91e0-b91f326c3c3f",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XlIWQ6zgJOiIL3ZP",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d1e8119-0926-4308-91aa-2bc8e853412a",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "0f0f4167-3866-42ef-9c7b-a6d86992c552",
+              "name": "webContentLink",
+              "value": "={{ $json.webContentLink }}",
+              "type": "string"
+            },
+            {
+              "id": "ff4c9f6d-364e-4506-9866-d65f8aa90f1d",
+              "name": "webViewLink",
+              "value": "={{ $json.webViewLink }}",
+              "type": "string"
+            },
+            {
+              "id": "5c4b0571-57d3-47e4-8a88-71fb43a8fe17",
+              "name": "createdTime",
+              "value": "={{ $json.createdTime }}",
+              "type": "string"
+            },
+            {
+              "id": "84a92a48-aca2-4d6f-9225-7a03cfdc2137",
+              "name": "modifiedTime",
+              "value": "={{ $json.modifiedTime }}",
+              "type": "string"
+            },
+            {
+              "id": "5ab33620-eb4e-49b4-b51d-7b28d6bdc58f",
+              "name": "userName",
+              "value": "={{ $json.owners[0].displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "404b45d0-479c-4a9d-818f-21a29b77e3df",
+              "name": "email",
+              "value": "={{ $json.lastModifyingUser.emailAddress }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2020,
+        800
+      ],
+      "id": "0daf935e-8dbd-45a0-ac78-f7b01744cd0b",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "57ccb4b8-a086-40ef-9759-8cf2242ec323",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        900
+      ],
+      "id": "635342bf-eb91-4e02-8517-44b138bbea54",
+      "name": "Webhook1",
+      "webhookId": "57ccb4b8-a086-40ef-9759-8cf2242ec323"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0",
+          "mode": "list",
+          "cachedResultName": "Tạo tuyến cáp kml",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 477642479,
+          "mode": "list",
+          "cachedResultName": "site_gen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit#gid=477642479"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        460,
+        1440
+      ],
+      "id": "6751d7b6-9fed-4b0e-ba69-1becb61ee62c",
+      "name": "Google Sheets4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Node này nằm sau Google Sheets, trước Code ghi file tạm.\n// Đặt tên: \"Prepare_Pure_JSON_for_Python\"\n\n// Lấy tất cả các item đầu vào từ node trước đó (ví dụ: Google Sheets)\nconst allN8nItems = $input.all();\n\n// Tạo một mảng mới chỉ chứa các đối tượng JSON thuần túy\n// Loại bỏ các metadata của n8n như \"pairedItem\"\nconst pureJsonData = allN8nItems.map(item => item.json);\n\n// Trả về mảng các đối tượng JSON thuần túy này.\n// Node Code tiếp theo (ghi file tạm) sẽ nhận cấu trúc này.\nreturn [{\n    json: {\n        rawData: pureJsonData, // Đặt tên biến để dễ truy cập sau này\n        // Giữ lại các biến context khác từ item đầu tiên nếu cần\n\n        // ...\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        1440
+      ],
+      "id": "1ea166f3-956e-4fb5-81da-c85092d8ba95",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        1440
+      ],
+      "id": "029bd3ee-45b5-46ca-8c0e-313e0402854e",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/tmp/site_kml_tmp.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        1440
+      ],
+      "id": "6c0267d5-f847-4040-a39f-acdc091ed04d",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "content": "## TẠO SITE KML QUA WEBHOOK GG SHEET",
+        "height": 340,
+        "width": 2840
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        1300
+      ],
+      "typeVersion": 1,
+      "id": "e96dacc5-e0ee-41b4-868f-c248ec835bea",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0",
+          "mode": "list",
+          "cachedResultName": "Tạo tuyến cáp kml",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1429268105,
+          "mode": "list",
+          "cachedResultName": "result",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit#gid=1429268105"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.name }}",
+            "Kml download": "={{ $json.webContentLink }}",
+            "Timestamp": "={{ $json.createdTime }}",
+            "User": "={{ $json.triggerEmail }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Kml download",
+              "displayName": "Kml download",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2480,
+        1480
+      ],
+      "id": "186901f8-d8ad-4a6c-8841-c3ac3d98671b",
+      "name": "Google Sheets5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2300,
+        1480
+      ],
+      "id": "a7e934b5-5782-4676-a745-33aa7b4c377e",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/site_kml_tmp.py --input-file \"/tmp/site_kml_tmp.json\" --output-file \"output_sites.kml\""
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        1440
+      ],
+      "id": "746182ff-7f64-4e0d-9923-2e2dca8f1019",
+      "name": "Tạo file Kml1"
+    },
+    {
+      "parameters": {
+        "name": "=site_kml_{{ new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/[^0-9a-zA-Z]/g, '_') }}.kml",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "13xQ8CQfGG5afG7TaNiL_k4IZhSUHt8Tu",
+          "mode": "list",
+          "cachedResultName": "KML GEN ",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/13xQ8CQfGG5afG7TaNiL_k4IZhSUHt8Tu"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1860,
+        1320
+      ],
+      "id": "a626f9a4-100b-4414-931a-95dfdcfa543a",
+      "name": "Google Drive2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XlIWQ6zgJOiIL3ZP",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d1e8119-0926-4308-91aa-2bc8e853412a",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "0f0f4167-3866-42ef-9c7b-a6d86992c552",
+              "name": "webContentLink",
+              "value": "={{ $json.webContentLink }}",
+              "type": "string"
+            },
+            {
+              "id": "ff4c9f6d-364e-4506-9866-d65f8aa90f1d",
+              "name": "webViewLink",
+              "value": "={{ $json.webViewLink }}",
+              "type": "string"
+            },
+            {
+              "id": "5c4b0571-57d3-47e4-8a88-71fb43a8fe17",
+              "name": "createdTime",
+              "value": "={{ $json.createdTime }}",
+              "type": "string"
+            },
+            {
+              "id": "84a92a48-aca2-4d6f-9225-7a03cfdc2137",
+              "name": "modifiedTime",
+              "value": "={{ $json.modifiedTime }}",
+              "type": "string"
+            },
+            {
+              "id": "5ab33620-eb4e-49b4-b51d-7b28d6bdc58f",
+              "name": "userName",
+              "value": "={{ $json.owners[0].displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "404b45d0-479c-4a9d-818f-21a29b77e3df",
+              "name": "email",
+              "value": "={{ $json.lastModifyingUser.emailAddress }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2080,
+        1320
+      ],
+      "id": "ee45502b-b309-40b6-b4da-bd4d0109336c",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "93cee6c7-56e5-4695-996d-f47564a9ad82",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        1440
+      ],
+      "id": "1685bac6-ecc4-41e9-826f-e994409b5c4f",
+      "name": "Webhook2",
+      "webhookId": "93cee6c7-56e5-4695-996d-f47564a9ad82"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "587f6ae8-3e1a-4065-8daf-a42ae3822f2d",
+              "name": "triggerEmail",
+              "value": "={{ $json.body.triggerInfo.triggeredBy.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1860,
+        1500
+      ],
+      "id": "dab52bc4-22c6-4431-80b2-4c8221acd827",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "587f6ae8-3e1a-4065-8daf-a42ae3822f2d",
+              "name": "triggerEmail",
+              "value": "={{ $json.body.triggerInfo.triggeredBy.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        1120
+      ],
+      "id": "0a6e7f8c-7534-4d63-8dd9-436d0116b47a",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0",
+          "mode": "list",
+          "cachedResultName": "Tạo tuyến cáp kml",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1804854025,
+          "mode": "list",
+          "cachedResultName": "route_gen",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit#gid=1804854025"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        220,
+        2000
+      ],
+      "id": "a563bbaf-394d-43d7-88a2-978eb6ba9b29",
+      "name": "Google Sheets6",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/route_gen.py --input-file /tmp/route_kml_tmp.json --api-key 5b3ce3597851110001cf6248cd2374175a23401fb3c67522bfa8668d --output-file /tmp/route_kml_tmp.kml"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        2000
+      ],
+      "id": "6a7e9e43-0756-40ba-9862-c44356cefef3",
+      "name": "Execute Command"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Node này nằm sau Google Sheets, trước Code ghi file tạm.\n// Đặt tên: \"Prepare_Pure_JSON_for_Python\"\n\n// Lấy tất cả các item đầu vào từ node trước đó (ví dụ: Google Sheets)\nconst allN8nItems = $input.all();\n\n// Tạo một mảng mới chỉ chứa các đối tượng JSON thuần túy\n// Loại bỏ các metadata của n8n như \"pairedItem\"\nconst pureJsonData = allN8nItems.map(item => item.json);\n\n// Trả về mảng các đối tượng JSON thuần túy này.\n// Node Code tiếp theo (ghi file tạm) sẽ nhận cấu trúc này.\nreturn [{\n    json: {\n        rawData: pureJsonData, // Đặt tên biến để dễ truy cập sau này\n        // Giữ lại các biến context khác từ item đầu tiên nếu cần\n\n        // ...\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        2000
+      ],
+      "id": "17daed47-8143-4533-8a29-eca610aaf072",
+      "name": "Code4"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {
+          "encoding": "utf8"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        2000
+      ],
+      "id": "db803a49-c313-4f35-91dd-d8d70d19d4c5",
+      "name": "Convert to File3"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/tmp/route_kml_tmp.json",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        880,
+        2000
+      ],
+      "id": "842787b7-01a1-4613-85ee-ea6f0a853f93",
+      "name": "Read/Write Files from Disk3"
+    },
+    {
+      "parameters": {
+        "content": "## TẠO ROUTE ĐƯỜNG ĐI",
+        "height": 340,
+        "width": 2860
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        1860
+      ],
+      "typeVersion": 1,
+      "id": "883b449d-218b-486c-9f1a-a89c9ecd6e00",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "587f6ae8-3e1a-4065-8daf-a42ae3822f2d",
+              "name": "triggerEmail",
+              "value": "={{ $json.body.triggerInfo.triggeredBy.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1700,
+        2080
+      ],
+      "id": "b7a336b7-ef8e-4f56-8bbd-e9140b5fabba",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "a76cf3fa-ecd1-477d-b92d-b287a56a19e7",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -60,
+        2000
+      ],
+      "id": "c17aba72-9ad3-4f33-b74f-fa05bfe530e6",
+      "name": "Webhook3",
+      "webhookId": "a76cf3fa-ecd1-477d-b92d-b287a56a19e7"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0",
+          "mode": "list",
+          "cachedResultName": "Tạo tuyến cáp kml",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1429268105,
+          "mode": "list",
+          "cachedResultName": "result",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fyxsF11Tcrb5unJjF6e16vn7rsRwFdZDf8KV4FuwhF0/edit#gid=1429268105"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.name }}",
+            "Kml download": "={{ $json.webContentLink }}",
+            "Timestamp": "={{ $json.createdTime }}",
+            "User": "={{ $json.triggerEmail }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "User",
+              "displayName": "User",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Kml download",
+              "displayName": "Kml download",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2280,
+        2000
+      ],
+      "id": "98735f27-beb8-4595-a713-3dac9c7495b9",
+      "name": "Google Sheets8",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2060,
+        2000
+      ],
+      "id": "1bc3c849-3a66-43a3-ba42-3772ce5d075c",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "name": "=route_kml_{{ new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/[^0-9a-zA-Z]/g, '_') }}.kml",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1700,
+        1880
+      ],
+      "id": "3ac3cdd7-895c-4c13-b44d-760c61b14c97",
+      "name": "Google Drive4",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "XlIWQ6zgJOiIL3ZP",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d1e8119-0926-4308-91aa-2bc8e853412a",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "0f0f4167-3866-42ef-9c7b-a6d86992c552",
+              "name": "webContentLink",
+              "value": "={{ $json.webContentLink }}",
+              "type": "string"
+            },
+            {
+              "id": "ff4c9f6d-364e-4506-9866-d65f8aa90f1d",
+              "name": "webViewLink",
+              "value": "={{ $json.webViewLink }}",
+              "type": "string"
+            },
+            {
+              "id": "5c4b0571-57d3-47e4-8a88-71fb43a8fe17",
+              "name": "createdTime",
+              "value": "={{ $json.createdTime }}",
+              "type": "string"
+            },
+            {
+              "id": "84a92a48-aca2-4d6f-9225-7a03cfdc2137",
+              "name": "modifiedTime",
+              "value": "={{ $json.modifiedTime }}",
+              "type": "string"
+            },
+            {
+              "id": "5ab33620-eb4e-49b4-b51d-7b28d6bdc58f",
+              "name": "userName",
+              "value": "={{ $json.owners[0].displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "404b45d0-479c-4a9d-818f-21a29b77e3df",
+              "name": "email",
+              "value": "={{ $json.lastModifyingUser.emailAddress }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1840,
+        1880
+      ],
+      "id": "2163a072-503a-4623-8767-6d4e3613ed1a",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData, originalString: jsonString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        2000
+      ],
+      "id": "96039c21-ed59-4cba-a7be-e9dc5954fbc0",
+      "name": "parse json4"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.parsedData.kml_file_path }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        2000
+      ],
+      "id": "980b618e-ae6d-449b-a9eb-6705cfb6c50d",
+      "name": "Read/Write Files from Disk4"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.parsedData.kml_file_path }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        1440
+      ],
+      "id": "f83df34b-d3a3-4709-992f-1fe4fc2e07e8",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData, originalString: jsonString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        1440
+      ],
+      "id": "f8aa6a14-acd8-40fe-8d6f-c36f20ad5bc5",
+      "name": "parse json"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets3": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command1": {
+      "main": [
+        [
+          {
+            "node": "parse json1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Convert to File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File2": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk2": {
+      "main": [
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse json1": {
+      "main": [
+        [
+          {
+            "node": "Tạo file bin1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tạo file bin1": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets4": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Tạo file Kml1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tạo file Kml1": {
+      "main": [
+        [
+          {
+            "node": "parse json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Google Sheets6": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "parse json4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Convert to File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File3": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk3": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Webhook3": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse json4": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk4": {
+      "main": [
+        [
+          {
+            "node": "Google Drive4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Google Drive2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "parse json": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "7342ba91-7d16-49c6-9bca-371eac12cc43",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fed535408ed45d741f945d1aea32a1746e2ccd7038d300e0e52b3dfdfc1d0d01"
+  },
+  "id": "rf8tHZPniB4f9daG",
+  "tags": []
+}

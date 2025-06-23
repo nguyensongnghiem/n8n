@@ -1,8 +1,9 @@
 import sys
 import json
-import os  # Để xử lý đường dẫn file
+import os
+import argparse
 
-# Hàm tạo một placemark đơn lẻ (giữ nguyên)
+# Hàm tạo một placemark cho một đoạn thẳng
 def create_single_line_placemark(coord1, coord2, line_name, description, line_color, line_width):
     def format_coord(coord_tuple):
         lon = coord_tuple[0]
@@ -36,51 +37,16 @@ def create_single_line_placemark(coord1, coord2, line_name, description, line_co
 
     return style_kml, placemark_kml
 
-# Hàm chính sửa đổi để đọc từ file
-def main(file_path="/tmp/output.json"):
-    # Kiểm tra file tồn tại
-    if not os.path.exists(file_path):
-        print(json.dumps({
-            "kmlContent": "",
-            "fileName": "error.kml",
-            "message": f"File {file_path} không tồn tại."
-        }), file=sys.stderr)
-        sys.exit(1)
-
-    # Đọc dữ liệu từ file JSON
-    try:
-        with open(file_path, 'r') as file:
-            n8n_input_items = json.load(file)[0]["rawData"]
-            # print(n8n_input_items)  # In ra dữ liệu để kiểm tra
-    except json.JSONDecodeError as e:
-        print(json.dumps({
-            "kmlContent": "",
-            "fileName": "error.kml",
-            "message": f"Lỗi parse JSON trong file {file_path}: {e}"
-        }), file=sys.stderr)
-        sys.exit(1)
-    except Exception as e:
-        print(json.dumps({
-            "kmlContent": "",
-            "fileName": "error.kml",
-            "message": f"Lỗi khi đọc file {file_path}: {e}"
-        }), file=sys.stderr)
-        sys.exit(1)
-
-    # Xử lý dữ liệu n8n_input_items (giống code gốc)
-    items_to_process = []
-    if isinstance(n8n_input_items, list):
-        items_to_process = n8n_input_items
-    elif isinstance(n8n_input_items, dict) and "json" in n8n_input_items:
-        items_to_process = [n8n_input_items]
-    else:
-        print(json.dumps({
-            "kmlContent": "",
-            "fileName": "error.kml",
-            "message": "Định dạng dữ liệu trong file không hợp lệ."
-        }), file=sys.stderr)
-        sys.exit(1)
-
+# Hàm chính để tạo nội dung KML từ danh sách dữ liệu
+def generate_kml_from_lines(items_to_process, doc_name="Dữ liệu tuyến KML"):
+    """
+    Tạo nội dung KML từ một danh sách các đối tượng tuyến.
+    Args:
+        items_to_process (list): Danh sách các dictionary chứa thông tin tuyến.
+        doc_name (str): Tên của Document trong KML.
+    Returns:
+        str: Chuỗi nội dung KML hoặc None nếu không có dữ liệu hợp lệ.
+    """
     all_styles = []
     # Cấu trúc mới để hỗ trợ thư mục lồng nhau
     # Key: Tên thư mục cấp 1, Value: {'placemarks': [...], 'subfolders': {tên_thư_mục_cấp_2: [...]}}
@@ -88,12 +54,12 @@ def main(file_path="/tmp/output.json"):
     has_valid_data = False
 
     for i, item in enumerate(items_to_process):
-        data_item = item
-        
+        data_item = item.get('json', item) # Tương thích với cấu trúc n8n
+
         try:
             required_keys = ["Longitude1", "Latitude1", "Longitude2", "Latitude2", "LineName", "Color", "Width"]
             if not all(key in data_item for key in required_keys):
-                print(f"[LOG]: Lỗi: Thiếu khóa bắt buộc ({', '.join(required_keys)}) trong hàng {i}. Bỏ qua hàng. Dữ liệu: {json.dumps(data_item)}", file=sys.stderr)
+                sys.stderr.write(f"Cảnh báo: Thiếu khóa bắt buộc trong hàng {i+1}. Bỏ qua. Dữ liệu: {json.dumps(data_item)}\n")
                 continue
 
             lon1 = float(data_item["Longitude1"])
@@ -130,21 +96,17 @@ def main(file_path="/tmp/output.json"):
             has_valid_data = True
 
         except ValueError as e:
-            print(f"[LOG]: Lỗi: Không thể chuyển đổi dữ liệu số (hàng {i}). Chi tiết: {e}. Dữ liệu: {json.dumps(data_item)}", file=sys.stderr)
+            sys.stderr.write(f"Cảnh báo: Lỗi chuyển đổi dữ liệu số (hàng {i+1}). Chi tiết: {e}. Dữ liệu: {json.dumps(data_item)}\n")
         except Exception as e:
-            print(f"[LOG]: Đã xảy ra lỗi không mong muốn khi xử lý hàng {i}: {e}. Dữ liệu: {json.dumps(data_item)}", file=sys.stderr)
+            sys.stderr.write(f"Cảnh báo: Lỗi không xác định khi xử lý hàng {i+1}: {e}. Dữ liệu: {json.dumps(data_item)}\n")
 
     if not has_valid_data:
-        print(json.dumps({
-            "kmlContent": "",
-            "fileName": "empty_lines.kml",
-            "message": "No valid data found to generate KML."
-        }), file=sys.stdout)
-        return
+        sys.stderr.write("Lỗi: Không có dữ liệu hợp lệ để tạo KML.\n")
+        return None
 
     unique_styles = sorted(list(set(all_styles)))
     styles_combined = "".join(unique_styles)
-    
+
     folder_and_root_content = []
     # Sắp xếp các thư mục cấp 1, đưa các mục ở gốc (key rỗng) xuống cuối
     sorted_folders_level1 = sorted(grouped_placemarks.keys(), key=lambda x: (x == '', x))
@@ -154,10 +116,10 @@ def main(file_path="/tmp/output.json"):
         placemarks_in_folder1 = folder1_data['placemarks']
         subfolders_data = folder1_data['subfolders']
 
-        if folder1_name: # Nếu là một thư mục có tên, không phải gốc
+        if folder1_name:  # Nếu là một thư mục có tên, không phải gốc
             level1_content = []
-            
-            # Xử lý các thư mục con (cấp 2) trước
+
+            # Xử lý các thư mục con (cấp 2)
             sorted_folders_level2 = sorted(subfolders_data.keys())
             for folder2_name in sorted_folders_level2:
                 placemarks_in_folder2 = subfolders_data[folder2_name]
@@ -168,8 +130,8 @@ def main(file_path="/tmp/output.json"):
           {folder2_content}
         </Folder>"""
                 level1_content.append(folder2_kml)
-            
-            # Thêm các placemark nằm trực tiếp trong thư mục cấp 1
+
+            # Thêm các placemark nằm trực tiếp trong thư mục cấp 1 (sau các thư mục con)
             level1_content.extend(placemarks_in_folder1)
 
             final_level1_content = "".join(level1_content)
@@ -179,28 +141,86 @@ def main(file_path="/tmp/output.json"):
       {final_level1_content}
     </Folder>"""
             folder_and_root_content.append(folder1_kml)
-        else: # Các placemark này nằm ở cấp gốc của Document
+        else:  # Các placemark này nằm ở cấp gốc của Document
             folder_and_root_content.extend(placemarks_in_folder1)
-            
+
     placemarks_combined_in_folders = "".join(folder_and_root_content)
 
     full_kml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
-    <name>Google Sheet KML Data with Folders and Descriptions</name>
+    <name>{doc_name}</name>
     {styles_combined}
     {placemarks_combined_in_folders}
   </Document>
 </kml>
 """
-    
-    # Trả về kết quả dưới dạng JSON ra stdout
-    print(json.dumps({
-        "kmlContent": full_kml_content,
-        "fileName": "google_sheet_lines_with_folders_and_descriptions.kml",
-        "lineCount": len(unique_styles)
-    }))
+    return full_kml_content
 
-# Khối main để chạy script
+# Khối thực thi chính khi script được chạy trực tiếp
 if __name__ == "__main__":
-    main()  # Gọi hàm main với đường dẫn file mặc định
+    parser = argparse.ArgumentParser(
+        description="Tạo KML chứa dữ liệu tuyến (đoạn thẳng) từ một file JSON đầu vào.",
+        formatter_class=argparse.RawTextHelpFormatter
+    )
+    parser.add_argument(
+        '--input-file',
+        type=str,
+        required=True,
+        help='Đường dẫn đến file JSON chứa dữ liệu các tuyến.'
+    )
+    parser.add_argument(
+        '--output-file',
+        type=str,
+        required=True,
+        help='Đường dẫn đầy đủ để lưu file KML đầu ra.'
+    )
+    args = parser.parse_args()
+
+    items_to_process = []
+    try:
+        with open(args.input_file, 'r', encoding='utf-8') as file:
+            loaded_data = json.load(file)
+            if isinstance(loaded_data, list) and len(loaded_data) > 0 and "rawData" in loaded_data[0]:
+                items_to_process = loaded_data[0]["rawData"]
+            elif isinstance(loaded_data, list):
+                items_to_process = loaded_data
+            else:
+                raise ValueError("Cấu trúc JSON không hợp lệ. Mong đợi một mảng hoặc một đối tượng có key 'rawData'.")
+    except FileNotFoundError:
+        result = {"status": "error", "message": f"Lỗi: File đầu vào '{args.input_file}' không tồn tại."}
+        print(json.dumps(result))
+        sys.exit(1)
+    except json.JSONDecodeError as e:
+        result = {"status": "error", "message": f"Lỗi parse JSON trong file '{args.input_file}': {e}"}
+        print(json.dumps(result))
+        sys.exit(1)
+    except Exception as e:
+        result = {"status": "error", "message": f"Lỗi khi đọc file '{args.input_file}': {e}"}
+        print(json.dumps(result))
+        sys.exit(1)
+
+    if not items_to_process:
+        result = {"status": "error", "message": "Không có dữ liệu hợp lệ trong file JSON đầu vào để tạo KML."}
+        print(json.dumps(result))
+        sys.exit(1)
+
+    kml_content = generate_kml_from_lines(items_to_process)
+
+    if kml_content:
+        try:
+            output_dir = os.path.dirname(args.output_file)
+            if output_dir:
+                os.makedirs(output_dir, exist_ok=True)
+            with open(args.output_file, 'w', encoding='utf-8') as f:
+                f.write(kml_content)
+            result = {"status": "success", "kml_file_path": args.output_file, "message": f"Tạo file KML thành công từ {len(items_to_process)} đối tượng."}
+            print(json.dumps(result))
+        except IOError as e:
+            result = {"status": "error", "message": f"Không thể ghi vào file KML '{args.output_file}': {e}"}
+            print(json.dumps(result))
+            sys.exit(1)
+    else:
+        result = {"status": "error", "message": "Không thể tạo nội dung KML từ dữ liệu đã xử lý."}
+        print(json.dumps(result))
+        sys.exit(1)

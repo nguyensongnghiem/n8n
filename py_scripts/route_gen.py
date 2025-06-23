@@ -120,15 +120,15 @@ def create_kml_from_routes(all_routes_data, main_folder_name="Các Tuyến Đư�
         linestring_placemark.style.linestyle.color = color
         linestring_placemark.style.linestyle.width = width
 
-        start_point = current_folder.newpoint(name=f"Bắt đầu: {line_name}")
-        start_point.coords = [route_coords[0]]
-        start_point.style.iconstyle.icon.href = 'http://maps.google.com/mapfiles/kml/paddle/grn-blank.png' # Icon màu xanh lá cây
-        start_point.style.iconstyle.scale = 0.8
+        # start_point = current_folder.newpoint(name=f"Bắt đầu: {line_name}")
+        # start_point.coords = [route_coords[0]]
+        # start_point.style.iconstyle.icon.href = 'http://maps.google.com/mapfiles/kml/paddle/grn-blank.png' # Icon màu xanh lá cây
+        # start_point.style.iconstyle.scale = 0.8
 
-        end_point = current_folder.newpoint(name=f"Kết thúc: {line_name}")
-        end_point.coords = [route_coords[-1]]
-        end_point.style.iconstyle.icon.href = 'http://maps.google.com/mapfiles/kml/paddle/red-blank.png' # Icon màu đỏ
-        end_point.style.iconstyle.scale = 0.8
+        # end_point = current_folder.newpoint(name=f"Kết thúc: {line_name}")
+        # end_point.coords = [route_coords[-1]]
+        # end_point.style.iconstyle.icon.href = 'http://maps.google.com/mapfiles/kml/paddle/red-blank.png' # Icon màu đỏ
+        # end_point.style.iconstyle.scale = 0.8
 
     try:
         return kml.kml() # Trả về chuỗi KML, prettyprint=True để định dạng đẹp
