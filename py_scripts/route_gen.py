@@ -62,7 +62,8 @@ def create_kml_from_routes(all_routes_data, main_folder_name="Các Tuyến Đư�
                                 - 'Color': Màu sắc KML (định dạng AABBGGRR)
                                 - 'Width': Độ rộng đường
                                 - 'FolderName': Tên thư mục cha trong KML
-                                - 'SecondFolderName': Tên thư mục con trong KML (tùy chọn)
+                                - 'SecondFolderName': Tên thư mục cấp 2 trong KML (tùy chọn)
+                                - 'ThirdFolderName': Tên thư mục cấp 3 trong KML (tùy chọn)
         main_folder_name (str): Tên thư mục chính trong KML (cấp 1).
         doc_name (str): Tên của Document trong KML.
     Returns:
@@ -90,7 +91,8 @@ def create_kml_from_routes(all_routes_data, main_folder_name="Các Tuyến Đư�
         color = route_info.get('Color', simplekml.Color.blue)
         width = route_info.get('Width', 4)
         folder_name = route_info.get('FolderName', 'Tuyến đường khác')
-        second_folder_name = route_info.get('SecondFolderName') # Lấy tên thư mục con
+        second_folder_name = route_info.get('SecondFolderName')
+        third_folder_name = route_info.get('ThirdFolderName')
         
         if not route_coords:
             sys.stderr.write(f"Cảnh báo: Tuyến đường '{line_name}' không có tọa độ, bỏ qua.\n")
@@ -111,6 +113,14 @@ def create_kml_from_routes(all_routes_data, main_folder_name="Các Tuyến Đư�
                 level1_folder_object = created_folders[level1_path]
                 created_folders[level2_path] = level1_folder_object.newfolder(name=second_folder_name)
             current_folder = created_folders[level2_path]
+
+            # Xác định thư mục cấp 3 (nếu có)
+            if third_folder_name:
+                level3_path = (main_folder_name, folder_name, second_folder_name, third_folder_name)
+                if level3_path not in created_folders:
+                    level2_folder_object = created_folders[level2_path]
+                    created_folders[level3_path] = level2_folder_object.newfolder(name=third_folder_name)
+                current_folder = created_folders[level3_path]
 
         linestring_placemark = current_folder.newlinestring(name=line_name, description=description)
         linestring_placemark.coords = route_coords
@@ -199,7 +209,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 1_TTCMKV Điện Bàn_An Thắng",
         "FolderName": "Quảng Nam 1",
-        "SecondFolderName": "Quảng Nam - Ring 1"
+        "SecondFolderName": "Quảng Nam - Ring 1",
+        "ThirdFolderName": "Nhóm A"
       },
       {
         "row_number": 3,
@@ -212,7 +223,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 1_An Thắng_Điện Bàn Đông",
         "FolderName": "Quảng Nam 1",
-        "SecondFolderName": "Quảng Nam - Ring 1"
+        "SecondFolderName": "Quảng Nam - Ring 1",
+        "ThirdFolderName": "Nhóm A"
       },
       {
         "row_number": 4,
@@ -225,7 +237,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 1_Điện Bàn Đông_Hội An Tây",
         "FolderName": "Quảng Nam 1",
-        "SecondFolderName": "Quảng Nam - Ring 11"
+        "SecondFolderName": "Quảng Nam - Ring 11",
+        "ThirdFolderName": "Nhóm B"
       },
       {
         "row_number": 5,
@@ -238,7 +251,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 1_Hội An Tây_Hội An",
         "FolderName": "Quảng Nam 1",
-        "SecondFolderName": "Quảng Nam - Ring 11"
+        "SecondFolderName": "Quảng Nam - Ring 11",
+        "ThirdFolderName": "Nhóm B"
       },
       {
         "row_number": 6,
@@ -251,7 +265,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 1_Hội An_TTCMKV Hội An",
         "FolderName": "Quảng Nam 1",
-        "SecondFolderName": "Quảng Nam - Ring 11"
+        "SecondFolderName": "Quảng Nam - Ring 11",
+        "ThirdFolderName": "Nhóm B"
       },
       {
         "row_number": 7,
@@ -264,7 +279,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 2_TTCMKV Điện Bàn_Điện Bàn",
         "FolderName": "Quảng Nam 2",
-        "SecondFolderName": "Quảng Nam - Ring 2"
+        "SecondFolderName": "Quảng Nam - Ring 2",
+        "ThirdFolderName": "Nhóm C"
       },
       {
         "row_number": 8,
@@ -277,7 +293,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 2_Điện Bàn_Điện Bàn Tây",
         "FolderName": "Quảng Nam 2",
-        "SecondFolderName": "Quảng Nam - Ring 2"
+        "SecondFolderName": "Quảng Nam - Ring 2",
+        "ThirdFolderName": "Nhóm C"
       },
       {
         "row_number": 9,
@@ -290,7 +307,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 2_Điện Bàn Tây_Điện Bàn Bắc",
         "FolderName": "Quảng Nam 2",
-        "SecondFolderName": "Quảng Nam - Ring 22"
+        "SecondFolderName": "Quảng Nam - Ring 22",
+        "ThirdFolderName": "Nhóm D"
       },
       {
         "row_number": 10,
@@ -303,7 +321,8 @@ if __name__ == "__main__":
         "Width": 3,
         "Description": "Quảng Nam - Ring 2_Điện Bàn Bắc_TTCMKV Hội An",
         "FolderName": "Quảng Nam 2",
-        "SecondFolderName": "Quảng Nam - Ring 22"
+        "SecondFolderName": "Quảng Nam - Ring 22",
+        "ThirdFolderName": "Nhóm D"
       }
     ]
 
@@ -397,7 +416,8 @@ if __name__ == "__main__":
                     'Color': kml_color,
                     'Width': kml_width,
                     'FolderName': folder_name,
-                    'SecondFolderName': route_data.get('SecondFolderName') # Truyền cả thư mục con vào đây
+                    'SecondFolderName': route_data.get('SecondFolderName'),
+                    'ThirdFolderName': route_data.get('ThirdFolderName')
                 })
             else:
                 sys.stderr.write(f"Cảnh báo: Không thể lấy dữ liệu tuyến đường cho '{line_name}'.\n")

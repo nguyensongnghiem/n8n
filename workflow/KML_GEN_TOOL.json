@@ -36,7 +36,7 @@
     },
     {
       "parameters": {
-        "command": "=python /app/scripts/line_kml_tmp.py"
+        "command": "=python /app/scripts/line_kml_tmp.py --input-file \"/tmp/line_tmp.json\" --output-file \"/tmp/line_tmp.kml\"\n"
       },
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
@@ -77,7 +77,7 @@
     {
       "parameters": {
         "operation": "write",
-        "fileName": "/tmp/output.json",
+        "fileName": "/tmp/line_tmp.json",
         "options": {}
       },
       "type": "n8n-nodes-base.readWriteFile",
@@ -103,19 +103,6 @@
       "typeVersion": 1,
       "id": "88837ec6-dbad-4a5b-bd2c-968863a0ee86",
       "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "jsCode": "const commandResultItem = $input.first();\n\n// Lấy thông tin từ Execute Command Node\n\nconst rawStdout = $input.first().json.parsedData.kmlContent || ''; // \n\n// Lấy thông tin ngữ cảnh từ các node trước đó (giả sử có sẵn trong input của Node Code này)\n\nconst routerName = commandResultItem.json.Router_name || \"ThietBiKhongXacDinh\"; // Lấy từ inputData gốc\n\nconst routerIP = commandResultItem.json.IP || \"N/A\";\n\nconst routerVendor = commandResultItem.json.Vendor || \"unknown\"; // Vendor từ inputData gốc\n\nlet routerConfigContent = ''; // Biến để lưu nội dung cấu hình đã làm sạch\n\nlet scriptSuccess = false;   // Cờ thành công từ script Python\n\nlet scriptError = null;      // Lỗi từ script Python\n\n// --- BƯỚC 1: Parse stdout từ Execute Command ---\n\nif (rawStdout) {\n\n    try { \n\n\n\n        if (rawStdout) {\n\n            routerConfigContent = rawStdout;\n\n            // --- BƯỚC 2: LÀM SẠCH NỘI DUNG CẤU HÌNH ---\n\n            // Thay thế '\\\\n' thành '\\n' (dấu xuống dòng thực sự)\n\n            // Thay thế '\\\\\"' thành '\"' (dấu nháy kép thực sự)\n\n            routerConfigContent = routerConfigContent.replace(/\\\\n/g, '\\n').replace(/\\\\\"/g, '\"');\n\n            \n\n            // Xử lý thêm các ký tự escape khác nếu cần (ví dụ: \\\\t -> \\t, \\\\r -> \\r)\n\n            // routerConfigContent = routerConfigContent.replace(/\\\\t/g, '\\t').replace(/\\\\r/g, '\\r');\n\n            \n\n            // Một số output có thể bắt đầu hoặc kết thúc với khoảng trắng, trim nó\n\n            routerConfigContent = routerConfigContent.trim();\n\n        } else {\n\n            routerConfigContent = \"Không có nội dung cấu hình từ script Python.\";\n\n        }\n\n    } catch (e) {\n\n        // Lỗi khi parse JSON từ stdout\n\n        scriptSuccess = false;\n\n        scriptError = `Lỗi phân tích JSON từ Netmiko script: ${e.message}. Raw stdout:\\n ${rawStdout}`;\n\n        routerConfigContent = `Lỗi: ${scriptError}`; // Ghi lỗi vào nội dung file\n\n    }\n\n} else {\n\n    routerConfigContent = \"Không có đầu ra nào từ lệnh Netmiko.\";\n\n    scriptSuccess = false;\n\n}\n\n\n\n// --- BƯỚC 3: Tạo tên file cấu hình độc đáo và hợp lệ ---\n\n\nconst timestamp = new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/[^0-9a-zA-Z]/g, '_');\n\n\n\n// Định dạng tên file: ROUTERNAME_VENDOR_alarm_YYYY_MM_DD_HH_MM_SS.cfg\n\nconst fileName = `line_kml_${timestamp}.kml`;\n\n\n// --- BƯỚC 4: Tạo nội dung file hoàn chỉnh (header + cấu hình) ---\n\nlet finalFileContent =  routerConfigContent;\n\n\n\n// --- BƯỚC 5: Chuyển nội dung file thành Binary Data (Base64) ---\n\nconst fileContentBase64 = Buffer.from(finalFileContent, 'utf8').toString('base64');\n\n\n\n// --- BƯỚC 6: Trả về Item với Binary Data Structure cho Google Drive ---\n\nreturn [{\n\n    json: {\n\n        fileName: fileName,\n        timestamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }),\n\n        mimeType: \"text/plain\", // File cấu hình thường là text/plain\n\n        // Các thông tin gốc từ input để truyền tiếp\n\n          // Giữ lại stderr\n     \n    },\n\n    binary: { // <--- Đây là phần quan trọng để đính kèm file\n\n        data: {\n\n            data: fileContentBase64, // Dữ liệu file đã mã hóa base64\n\n            fileName: fileName,      // Tên file (lặp lại)\n\n            mimeType: \"text/plain\",  // Loại file (lặp lại)\n\n        }\n\n    }\n\n}];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        1480,
-        900
-      ],
-      "id": "77d1efbe-b4d7-47c2-b2ea-a74ce2927502",
-      "name": "Tạo file bin1"
     },
     {
       "parameters": {
@@ -152,7 +139,7 @@
           "value": {
             "Name": "={{ $json.name }}",
             "Kml download": "={{ $json.webContentLink }}",
-            "Timestamp": "={{ $json.createdTime }}",
+            "Timestamp": "={{new Date($json.createdTime).toLocaleString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}}",
             "User": "={{ $json.triggerEmail }}"
           },
           "matchingColumns": [
@@ -236,7 +223,7 @@
     },
     {
       "parameters": {
-        "name": "={{ $json.fileName }}",
+        "name": "=line_kml_{{ new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/[^0-9a-zA-Z]/g, '_') }}.kml",
         "driveId": {
           "__rl": true,
           "mode": "list",
@@ -255,7 +242,7 @@
       "typeVersion": 3,
       "position": [
         1800,
-        800
+        780
       ],
       "id": "4229443a-f593-4537-91e0-b91f326c3c3f",
       "name": "Google Drive",
@@ -291,7 +278,7 @@
             {
               "id": "5c4b0571-57d3-47e4-8a88-71fb43a8fe17",
               "name": "createdTime",
-              "value": "={{ $json.createdTime }}",
+              "value": "={{$json.createdTime}}",
               "type": "string"
             },
             {
@@ -453,7 +440,7 @@
           "value": {
             "Name": "={{ $json.name }}",
             "Kml download": "={{ $json.webContentLink }}",
-            "Timestamp": "={{ $json.createdTime }}",
+            "Timestamp": "={{new Date($json.createdTime).toLocaleString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}}",
             "User": "={{ $json.triggerEmail }}"
           },
           "matchingColumns": [
@@ -605,7 +592,7 @@
             {
               "id": "5c4b0571-57d3-47e4-8a88-71fb43a8fe17",
               "name": "createdTime",
-              "value": "={{ $json.createdTime }}",
+              "value": "={{$json.createdTime}}",
               "type": "string"
             },
             {
@@ -695,8 +682,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        220,
-        1120
+        1800,
+        980
       ],
       "id": "0a6e7f8c-7534-4d63-8dd9-436d0116b47a",
       "name": "Edit Fields4"
@@ -869,7 +856,7 @@
           "value": {
             "Name": "={{ $json.name }}",
             "Kml download": "={{ $json.webContentLink }}",
-            "Timestamp": "={{ $json.createdTime }}",
+            "Timestamp": "={{new Date($json.createdTime).toLocaleString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}}",
             "User": "={{ $json.triggerEmail }}"
           },
           "matchingColumns": [
@@ -1094,6 +1081,20 @@
       ],
       "id": "f8aa6a14-acd8-40fe-8d6f-c36f20ad5bc5",
       "name": "parse json"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.parsedData.kml_file_path }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        900
+      ],
+      "id": "d0c87d26-28d0-41f6-b61f-8b0401d3b5ce",
+      "name": "Read/Write Files from Disk5"
     }
   ],
   "pinData": {},
@@ -1157,7 +1158,7 @@
       "main": [
         [
           {
-            "node": "Tạo file bin1",
+            "node": "Read/Write Files from Disk5",
             "type": "main",
             "index": 0
           }
@@ -1193,22 +1194,6 @@
             "node": "Merge1",
             "type": "main",
             "index": 0
-          }
-        ]
-      ]
-    },
-    "Tạo file bin1": {
-      "main": [
-        [
-          {
-            "node": "Google Drive",
-            "type": "main",
-            "index": 0
-          },
-          {
-            "node": "Merge1",
-            "type": "main",
-            "index": 1
           }
         ]
       ]
@@ -1523,13 +1508,29 @@
           }
         ]
       ]
+    },
+    "Read/Write Files from Disk5": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "7342ba91-7d16-49c6-9bca-371eac12cc43",
+  "versionId": "f93752e9-2fe6-487a-8182-a72002a0ed35",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "fed535408ed45d741f945d1aea32a1746e2ccd7038d300e0e52b3dfdfc1d0d01"

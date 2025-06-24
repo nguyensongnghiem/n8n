@@ -48,9 +48,8 @@ def generate_kml_from_lines(items_to_process, doc_name="Dữ liệu tuyến KML"
         str: Chuỗi nội dung KML hoặc None nếu không có dữ liệu hợp lệ.
     """
     all_styles = []
-    # Cấu trúc mới để hỗ trợ thư mục lồng nhau
-    # Key: Tên thư mục cấp 1, Value: {'placemarks': [...], 'subfolders': {tên_thư_mục_cấp_2: [...]}}
-    grouped_placemarks = {} 
+    # Cấu trúc cây để hỗ trợ nhiều cấp thư mục, tương tự site_kml_tmp.py
+    grouped_placemarks = {'placemarks': [], 'subfolders': {}}
     has_valid_data = False
 
     for i, item in enumerate(items_to_process):
@@ -68,7 +67,8 @@ def generate_kml_from_lines(items_to_process, doc_name="Dữ liệu tuyến KML"
             lat2 = float(data_item["Latitude2"])
             line_name = str(data_item["LineName"])
             folder_name = str(data_item.get("FolderName", "")).strip()
-            second_folder_name = str(data_item.get("SecondFolderName", "")).strip() # Thêm thư mục cấp 2
+            second_folder_name = str(data_item.get("SecondFolderName", "")).strip()
+            third_folder_name = str(data_item.get("ThirdFolderName", "")).strip() # Thêm thư mục cấp 3
             description = str(data_item.get("Description", "")).strip()
             line_color = str(data_item["Color"])
             line_width = int(data_item["Width"])
@@ -82,16 +82,25 @@ def generate_kml_from_lines(items_to_process, doc_name="Dữ liệu tuyến KML"
             
             all_styles.append(style_kml)
             
-            # Logic nhóm mới cho 2 cấp thư mục
-            if folder_name not in grouped_placemarks:
-                grouped_placemarks[folder_name] = {'placemarks': [], 'subfolders': {}}
+            # Logic nhóm cho 3 cấp thư mục (tái sử dụng từ site_kml_tmp.py)
+            current_level_node = grouped_placemarks
+
+            if folder_name:
+                if folder_name not in current_level_node['subfolders']:
+                    current_level_node['subfolders'][folder_name] = {'placemarks': [], 'subfolders': {}}
+                current_level_node = current_level_node['subfolders'][folder_name]
+
+                if second_folder_name:
+                    if second_folder_name not in current_level_node['subfolders']:
+                        current_level_node['subfolders'][second_folder_name] = {'placemarks': [], 'subfolders': {}}
+                    current_level_node = current_level_node['subfolders'][second_folder_name]
+
+                    if third_folder_name:
+                        if third_folder_name not in current_level_node['subfolders']:
+                            current_level_node['subfolders'][third_folder_name] = {'placemarks': [], 'subfolders': {}}
+                        current_level_node = current_level_node['subfolders'][third_folder_name]
             
-            if second_folder_name:
-                if second_folder_name not in grouped_placemarks[folder_name]['subfolders']:
-                    grouped_placemarks[folder_name]['subfolders'][second_folder_name] = []
-                grouped_placemarks[folder_name]['subfolders'][second_folder_name].append(placemark_kml)
-            else:
-                grouped_placemarks[folder_name]['placemarks'].append(placemark_kml)
+            current_level_node['placemarks'].append(placemark_kml)
             
             has_valid_data = True
 
@@ -107,44 +116,28 @@ def generate_kml_from_lines(items_to_process, doc_name="Dữ liệu tuyến KML"
     unique_styles = sorted(list(set(all_styles)))
     styles_combined = "".join(unique_styles)
 
-    folder_and_root_content = []
-    # Sắp xếp các thư mục cấp 1, đưa các mục ở gốc (key rỗng) xuống cuối
-    sorted_folders_level1 = sorted(grouped_placemarks.keys(), key=lambda x: (x == '', x))
+    # Hàm đệ quy để tạo KML cho các thư mục từ cấu trúc cây
+    def generate_folder_kml_recursive(current_folder_node):
+        content = []
+        content.extend(current_folder_node.get('placemarks', []))
+        subfolders_dict = current_folder_node.get('subfolders', {})
+        sorted_subfolder_names = sorted(subfolders_dict.keys())
 
-    for folder1_name in sorted_folders_level1:
-        folder1_data = grouped_placemarks[folder1_name]
-        placemarks_in_folder1 = folder1_data['placemarks']
-        subfolders_data = folder1_data['subfolders']
-
-        if folder1_name:  # Nếu là một thư mục có tên, không phải gốc
-            level1_content = []
-
-            # Xử lý các thư mục con (cấp 2)
-            sorted_folders_level2 = sorted(subfolders_data.keys())
-            for folder2_name in sorted_folders_level2:
-                placemarks_in_folder2 = subfolders_data[folder2_name]
-                folder2_content = "".join(placemarks_in_folder2)
-                folder2_kml = f"""
-        <Folder>
-          <name>{folder2_name}</name>
-          {folder2_content}
-        </Folder>"""
-                level1_content.append(folder2_kml)
-
-            # Thêm các placemark nằm trực tiếp trong thư mục cấp 1 (sau các thư mục con)
-            level1_content.extend(placemarks_in_folder1)
-
-            final_level1_content = "".join(level1_content)
-            folder1_kml = f"""
+        for subfolder_name in sorted_subfolder_names:
+            subfolder_node = subfolders_dict[subfolder_name]
+            subfolder_kml_content = generate_folder_kml_recursive(subfolder_node)
+            
+            if subfolder_kml_content:
+                folder_kml = f"""
     <Folder>
-      <name>{folder1_name}</name>
-      {final_level1_content}
+      <name>{subfolder_name}</name>
+      {subfolder_kml_content}
     </Folder>"""
-            folder_and_root_content.append(folder1_kml)
-        else:  # Các placemark này nằm ở cấp gốc của Document
-            folder_and_root_content.extend(placemarks_in_folder1)
+                content.append(folder_kml)
+        
+        return "".join(content)
 
-    placemarks_combined_in_folders = "".join(folder_and_root_content)
+    placemarks_combined_in_folders = generate_folder_kml_recursive(grouped_placemarks)
 
     full_kml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
