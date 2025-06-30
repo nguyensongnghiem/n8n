@@ -1,0 +1,3463 @@
+{
+  "name": "Discord SLASH COMMAND",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c96fc6b2-2ee0-4909-acff-4026995fd0de",
+        "options": {
+          "noResponseBody": true,
+          "responseCode": {
+            "values": {
+              "responseCode": 204
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2200,
+        520
+      ],
+      "id": "079f5aec-e1f3-4460-8f5c-ac94086d0d16",
+      "name": "Webhook",
+      "webhookId": "c96fc6b2-2ee0-4909-acff-4026995fd0de"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.name as \"Province\" ,s.site_id as \"Site_ID\",r.name as \"Router_name\",r.ip as \"IP\", v.name as \"Vendor\", td.name as \"Router_type\"  FROM mobifone.router r  \n\njoin site s on s.id = r.site_id \n\njoin mobifone.province p on s.province_id = p.id \n\njoin mobifone.router_type t on r.router_type_id = t.id \n\njoin mobifone.vendor v on t.vendor_id = v.id \n\njoin transmission_device_type td on td.id = r.transmission_device_type_id  \nWHERE r.name LIKE '%{{ $json.body.data.options[0].value }}%'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -780,
+        -40
+      ],
+      "id": "8e700031-4ad0-4dd9-a0d9-4228743a4d71",
+      "name": "MySQL",
+      "alwaysOutputData": true,
+      "credentials": {
+        "mySql": {
+          "id": "tyyI8ui63atTqUun",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "get-info",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8a98fc79-f940-4e46-af36-7ee4e7a1b47a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get-info"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7028f0a7-9f9b-4de1-8718-e4043d625d26",
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "get-cpu-usage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get-cpu-usage"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1ebc0c3c-1af8-41cd-b79a-227fddf33871",
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "/show-version",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "show-version"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "eb7d6d8d-a74b-45af-8698-bd1a89f4a5f6",
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "get-fo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get-fo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1276cc42-1397-45b5-b2fb-19b5d8332bb5",
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "ping",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ping"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7e764fdd-ad3b-41a6-b294-216efe291ab3",
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "get-alarm",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get Alarm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1b46047e-b5a7-4544-95a1-d26241769ff8",
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "get-interface",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get interface"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "62145df5-24ed-4a43-82f5-64d0aaac651f",
+                    "leftValue": "={{ $json.body.data.name }}",
+                    "rightValue": "get-optical",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get optical"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1740,
+        420
+      ],
+      "id": "25059aa7-f3ac-4584-8753-b0b4f152cce5",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MH0QrxyUfKHL6A4Z1Ghlj_4pUh0zk9kweC48Pl8-iMs/edit?gid=1038448833#gid=1038448833",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1038448833,
+          "mode": "list",
+          "cachedResultName": "Cáp_CT",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MH0QrxyUfKHL6A4Z1Ghlj_4pUh0zk9kweC48Pl8-iMs/edit#gid=1038448833"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Điểm đầu",
+              "lookupValue": "={{ $json.body.data.options[0].value }}"
+            },
+            {
+              "lookupColumn": "Điểm cuối",
+              "lookupValue": "={{ $json.body.data.options[0].value }}"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -980,
+        2340
+      ],
+      "id": "cc746b77-2cc3-43d6-8004-f695c7d72f9a",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "989b14ac-f43c-4fbe-b26c-9edd85ad19b2",
+              "name": "Tỉnh",
+              "value": "={{ $json[\"Tỉnh\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "819e8151-dcb8-48c6-9639-5863eb94fade",
+              "name": "Tuyến cáp",
+              "value": "={{ $json[\"Tuyến cáp\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "b5ded28f-ce63-4b96-b1c7-502a98b98620",
+              "name": "Điểm đầu",
+              "value": "={{ $json[\"Điểm đầu\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "0bf17411-c52f-41b8-a4ae-6bbe758add1e",
+              "name": "Điểm cuối",
+              "value": "={{ $json[\"Điểm cuối\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "0a0ac98e-dbfe-4b49-8044-00ebcda98708",
+              "name": "Link 2",
+              "value": "={{ $json[\"Link 2\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "d99baeb3-b09a-4d09-9da8-41131619ddf6",
+              "name": "Loại cáp",
+              "value": "={{ $json[\"Loại cáp\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "8a74d610-619e-4686-a586-8c569a3b86d6",
+              "name": "Chiều dài cáp",
+              "value": "={{ $json[\"Chiều dài cáp\"] }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -760,
+        2340
+      ],
+      "id": "261e10fd-71ba-4f6f-ba8a-14d8ffae0d2f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "670f890e-6bcb-47ee-a371-5543b363527d",
+              "name": "text",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            },
+            {
+              "id": "b5342dbc-c983-4a2e-9ec3-60d4c8e9f8f3",
+              "name": "user_name",
+              "value": "={{ $json.body.member.user.username }}",
+              "type": "string"
+            },
+            {
+              "id": "3fb7570f-e867-4bbe-878c-0972f5b5bec5",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7b0e1061-00aa-4ea5-871c-6ba86035e13b",
+              "name": "command",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -760,
+        2140
+      ],
+      "id": "ef16add8-2a53-4e08-95ec-4f41fe27e347",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -380,
+        2220
+      ],
+      "id": "faa5ffb5-f4f4-447a-aed7-85ad5abf184e",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.name as \"Province\" ,s.site_id as \"Site_ID\",r.name as \"Router_name\",r.ip as \"IP\", v.name as \"Vendor\", td.name as \"Router_type\"  FROM mobifone.router r  \n\njoin site s on s.id = r.site_id \n\njoin mobifone.province p on s.province_id = p.id \n\njoin mobifone.router_type t on r.router_type_id = t.id \n\njoin mobifone.vendor v on t.vendor_id = v.id \n\njoin transmission_device_type td on td.id = r.transmission_device_type_id  \nWHERE r.name = \"{{ $json.body.data.options[0].value }}\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -820,
+        240
+      ],
+      "id": "8e6defbf-e012-4347-abef-c8f201015536",
+      "name": "MySQL1",
+      "credentials": {
+        "mySql": {
+          "id": "tyyI8ui63atTqUun",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "command": "=ping -c 5  {{ $json.IP }}\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -380,
+        900
+      ],
+      "id": "e7cdfc70-02c7-4b04-acb4-7a8a0a878444",
+      "name": "Ping test"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.name as \"Province\" ,s.site_id as \"Site_ID\",r.name as \"Router_name\",r.ip as \"IP\", v.name as \"Vendor\", td.name as \"Router_type\"  FROM mobifone.router r  \n\njoin site s on s.id = r.site_id \n\njoin mobifone.province p on s.province_id = p.id \n\njoin mobifone.router_type t on r.router_type_id = t.id \n\njoin mobifone.vendor v on t.vendor_id = v.id \n\njoin transmission_device_type td on td.id = r.transmission_device_type_id  \nWHERE r.name = \"{{ $json.body.data.options[0].value }}\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -820,
+        740
+      ],
+      "id": "0067e055-d1f0-4651-b2e4-4269bf7c5a5e",
+      "name": "MySQL3",
+      "credentials": {
+        "mySql": {
+          "id": "tyyI8ui63atTqUun",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.name as \"Province\" ,s.site_id as \"Site_ID\",r.name as \"Router_name\",r.ip as \"IP\", v.name as \"Vendor\", td.name as \"Router_type\"  FROM mobifone.router r  \n\njoin site s on s.id = r.site_id \n\njoin mobifone.province p on s.province_id = p.id \n\njoin mobifone.router_type t on r.router_type_id = t.id \n\njoin mobifone.vendor v on t.vendor_id = v.id \n\njoin transmission_device_type td on td.id = r.transmission_device_type_id  \nWHERE r.name = \"{{ $json.body.text }}\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -820,
+        1200
+      ],
+      "id": "e4707592-fe37-49c6-8f2a-fc1425762a82",
+      "name": "Tra cứu IP của router",
+      "credentials": {
+        "mySql": {
+          "id": "tyyI8ui63atTqUun",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Bạn là chuyên gia về thiết bị mạng các vendor. Hãy tóm tắt cho tôi các interface nào đang bị down mặc dù đã bật, description và thời gian từ lần thay đổi cuối cùng của các interface đó . Tóm tắt ngắn gọn phù hợp với chatbot :\n{{ $json.rawOutput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        1660,
+        2060
+      ],
+      "id": "b5d05e7e-b727-40d5-be4e-870b3dbb471e",
+      "name": "AI Agent",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        2260
+      ],
+      "id": "3e6442ce-be3e-47cf-bd9e-fb5dc60db4b5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yo3h1jiaVfkEdkeA",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "history",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1800,
+        2320
+      ],
+      "id": "9a8ada42-afdd-4ad4-8c72-b8911164d03d",
+      "name": "Simple Memory",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -640,
+        1280
+      ],
+      "id": "b7348972-a53f-4005-92a2-a9d033d6be12",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce890d26-4879-4d48-805a-98024dc6242d",
+              "name": "user_id",
+              "value": "={{ $json.body.user_id }}",
+              "type": "string"
+            },
+            {
+              "id": "fcca1d9f-12a9-45bf-a368-ac6feaef0fa7",
+              "name": "user_name",
+              "value": "={{ $json.body.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "7909a1cf-6b86-4a05-a1c4-9d3a3eba851e",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85dc6d4-982d-4cb2-bdf3-8221f3b5d6e0",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel_name }}",
+              "type": "string"
+            },
+            {
+              "id": "2cf6570f-41dd-4370-a920-14b1d056da8f",
+              "name": "router_name",
+              "value": "={{ $json.body.text }}",
+              "type": "string"
+            },
+            {
+              "id": "51fe188a-e455-4be7-9774-0bed75dac75f",
+              "name": "user_name",
+              "value": "={{ $json.body.user_name }}",
+              "type": "string"
+            },
+            {
+              "id": "01be531d-0643-4bff-9be8-b0038ef4f423",
+              "name": "command",
+              "value": "={{ $json.body.command }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -820,
+        1360
+      ],
+      "id": "db0729a4-98bb-4205-877b-a9600045ce2b",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce890d26-4879-4d48-805a-98024dc6242d",
+              "name": "user_id",
+              "value": "={{ $json.body.member.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7909a1cf-6b86-4a05-a1c4-9d3a3eba851e",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85dc6d4-982d-4cb2-bdf3-8221f3b5d6e0",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2cf6570f-41dd-4370-a920-14b1d056da8f",
+              "name": "router_name",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "51fe188a-e455-4be7-9774-0bed75dac75f",
+              "name": "user_name",
+              "value": "={{ $json.body.member.user.global_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4ca19c05-33c7-4a30-8db0-e7fe94d0af99",
+              "name": "message_id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -820,
+        900
+      ],
+      "id": "edfef1eb-bbb9-4945-b91f-d5f9b4e8c28b",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -600,
+        800
+      ],
+      "id": "26461e46-bd7d-4fbd-a8f3-89ad93c23390",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -160,
+        800
+      ],
+      "id": "f2ffb9f3-279e-44c5-900f-10c0f385e091",
+      "name": "Merge4"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -460,
+        -120
+      ],
+      "id": "ecbac222-4d2f-4427-9b80-f3dfe3bccb7d",
+      "name": "Merge5"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -540,
+        320
+      ],
+      "id": "f9cb8e8d-a704-4c0b-b023-73e4459b833d",
+      "name": "Merge6"
+    },
+    {
+      "parameters": {
+        "content": "## GET ROUTER INFO FROM DATABASE\n",
+        "height": 420,
+        "width": 1660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1240,
+        -260
+      ],
+      "typeVersion": 1,
+      "id": "b1cb97d1-bba9-4610-a623-53e1260f258f",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## GET CPU USSAGE\n",
+        "height": 400,
+        "width": 1660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1240,
+        200
+      ],
+      "typeVersion": 1,
+      "id": "86c1bf71-8205-4792-9e0e-82cd6a9f9ad4",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## PING TO A ROUTER USSING ROUTER NAME\n",
+        "height": 380,
+        "width": 1660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1240,
+        660
+      ],
+      "typeVersion": 1,
+      "id": "166fc1a1-4654-42fd-b79a-656a508ffee2",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## GET ROUTER VERSION",
+        "height": 420,
+        "width": 1660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1240,
+        1100
+      ],
+      "typeVersion": 1,
+      "id": "a2e8e7b9-47c4-483c-919b-269797efed7c",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## GET CURRRENT ALARM\n",
+        "height": 420,
+        "width": 1660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1240,
+        1580
+      ],
+      "typeVersion": 1,
+      "id": "9e872219-ae2c-495c-91c6-e4f1d84851da",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## GET FO CABLE OF A SITEID\n",
+        "height": 420,
+        "width": 1660
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1260,
+        2060
+      ],
+      "typeVersion": 1,
+      "id": "5847f074-7184-4e30-81b8-d94edcbca185",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "={{ $json.stdout }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        320,
+        800
+      ],
+      "id": "1b63d667-1f98-4ce0-b2b5-5430316a13a6",
+      "name": "Discord",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5bc083cf-9364-420a-9ff0-591e59e99c60",
+              "name": "stdout",
+              "value": "=KẾT QUẢ PING ROUTER {{ $json.Router_name }}: ```{{ $json.stdout }}\\n```",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        100,
+        800
+      ],
+      "id": "fc5530ce-4a55-4b45-9172-c55bbf15816c",
+      "name": "Định dang blockcode "
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce890d26-4879-4d48-805a-98024dc6242d",
+              "name": "user_id",
+              "value": "={{ $json.body.member.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7909a1cf-6b86-4a05-a1c4-9d3a3eba851e",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85dc6d4-982d-4cb2-bdf3-8221f3b5d6e0",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2cf6570f-41dd-4370-a920-14b1d056da8f",
+              "name": "router_name",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "51fe188a-e455-4be7-9774-0bed75dac75f",
+              "name": "user_name",
+              "value": "={{ $json.body.member.user.global_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4ca19c05-33c7-4a30-8db0-e7fe94d0af99",
+              "name": "message_id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -780,
+        -200
+      ],
+      "id": "0a8f3bde-60ba-4632-a95f-80f8a12e986b",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "={{ $json.stdout }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        100,
+        -120
+      ],
+      "id": "80d4afef-32f1-468b-a326-bcc7690ccd87",
+      "name": "Discord1",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5bc083cf-9364-420a-9ff0-591e59e99c60",
+              "name": "stdout",
+              "value": "=THÔNG TIN CƠ BẢN CỦA ROUTER {{ $json.Router_name }}: ```\n  \"Tỉnh\": {{$json.Province}},\n  \"Site_ID\": {{$json.Site_ID}},\n  \"Router_name\": {{$json.Router_name}},\n  \"IP\": {{$json.IP}},\n  \"Vendor\": {{$json.Vendor}},\n  \"Router_type\": {{$json.Router_type}}\n```",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        -120
+      ],
+      "id": "869c801d-fe3f-4867-a457-470fa23b4dd3",
+      "name": "Định dang blockcode 1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce890d26-4879-4d48-805a-98024dc6242d",
+              "name": "user_id",
+              "value": "={{ $json.body.member.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7909a1cf-6b86-4a05-a1c4-9d3a3eba851e",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85dc6d4-982d-4cb2-bdf3-8221f3b5d6e0",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2cf6570f-41dd-4370-a920-14b1d056da8f",
+              "name": "router_name",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "51fe188a-e455-4be7-9774-0bed75dac75f",
+              "name": "user_name",
+              "value": "={{ $json.body.member.user.global_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4ca19c05-33c7-4a30-8db0-e7fe94d0af99",
+              "name": "message_id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8007ee0c-905a-45c8-b755-660fc5359809",
+              "name": "command",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -820,
+        440
+      ],
+      "id": "1969323d-c162-49be-9f3c-761d67ec0029",
+      "name": "Edit Fields9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b81d8d9-0b7f-4e2e-9a5f-45140c90a4d6",
+              "name": "body.channel.id",
+              "value": "={{ $json.body.channel.id }}",
+              "type": "string"
+            },
+            {
+              "id": "abe95187-4f55-481c-a70f-52524c261111",
+              "name": "body.channel.name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "c018f5c6-a6d5-454a-b426-b3562a8a053e",
+              "name": "body.member.user.id",
+              "value": "={{ $json.body.member.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "e5590611-b55c-4f1b-a662-2da4891c2660",
+              "name": "body.member.user.username",
+              "value": "={{ $json.body.member.user.username }}",
+              "type": "string"
+            },
+            {
+              "id": "d47c6624-e08c-4325-a179-142d5dbdf10a",
+              "name": "body.data.id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f108339d-a06b-4149-84d6-795682e1fc18",
+              "name": "body.data.name",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            },
+            {
+              "id": "b268da0a-6fb8-45a2-bca6-1dfb21a32a85",
+              "name": "body.data.options[0].name",
+              "value": "={{ $json.body.data.options[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "1bfab6a9-e9b3-437c-86aa-50bd1f273b7b",
+              "name": "body.data.options[0].value",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "a5631b76-e9b1-41e4-9976-ded299c4b002",
+              "name": "body.channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "32bbc277-581d-4d78-a3b5-17102ca18c71",
+              "name": "body.member.user.global_name",
+              "value": "={{ $json.body.member.user.global_name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1940,
+        520
+      ],
+      "id": "10025cd6-9e44-4599-929e-7f56d5a53f03",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.all(); // Giả sử stdout chứa JSON\nconst maxMessageLength = 1990; // Giới hạn ký tự Discord, trừ 6 cho block code\nconst maxFileSize = 8 * 1024 * 1024; // 8MB cho file Discord\nconst notificationMessage = 'Kết quả bảng quá dài, đã gửi trong file table.txt:';\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT từ pairedItem.item, các trường khác từ json\n  const headers = ['STT', ...Object.keys(data[0].json)];\n  const keys = ['pairedItem.item', ...Object.keys(data[0].json).map(key => `json.${key}`)];\n\n  // Chuẩn bị rows\n  const rows = data.map(obj => keys.map(key => {\n    let value;\n    if (key.startsWith('json.')) {\n      const subKey = key.split('.')[1];\n      value = obj.json[subKey] ?? '';\n    } else {\n      value = obj[key.split('.')[1]]?.item ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(2); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\n// Hàm chia bảng thành các đoạn dựa trên \\n\nfunction splitText(text, maxLength) {\n  const lines = text.split('\\n');\n  const result = [];\n  let current = '';\n\n  for (let line of lines) {\n    const lineWithBreak = line + '\\n';\n    if (current.length + lineWithBreak.length <= maxLength) {\n      current += lineWithBreak;\n    } else {\n      if (current) result.push(current);\n      current = lineWithBreak;\n    }\n  }\n  if (current) result.push(current.trimEnd());\n  return result;\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n  const textSizeBytes = Buffer.byteLength(tableText, 'utf8');\n\n  // Kiểm tra kích thước file\n  if (textSizeBytes > maxFileSize) {\n    throw new Error('Kích thước bảng vượt quá 8MB, không thể gửi file.');\n  }\n\n  if (tableText.length <= maxMessageLength - 6) {\n    // Nếu bảng ngắn, gửi trong block code\n    return [{\n      json: {\n        text: `\\`\\`\\`markdown\\n${tableText}\\n\\`\\`\\``,\n        ...$input.first().json\n      }\n    }];\n  } else {\n    // Nếu bảng dài, gửi file và thông báo\n    const splitMessages = splitText(tableText, maxMessageLength);\n    const fileContent = Buffer.from(tableText, 'utf8');\n    return [{\n      json: {\n        text: notificationMessage,\n        file: {\n          name: 'table.txt',\n          content: fileContent.toString('base64')\n        },\n        ...$input.first().json\n      }\n    }].concat(splitMessages.map((message, index) => ({\n      json: {\n        text: `\\`\\`\\`markdown\\n${message}\\n\\`\\`\\``\n      }\n    })));\n  }\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`     \n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -560,
+        2340
+      ],
+      "id": "fdc8a62b-2638-429f-9917-77e2049f3f05",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        2220
+      ],
+      "id": "fcba96dd-1b71-4ad3-8605-7bc7ff71da68",
+      "name": "Discord3",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.name as \"Province\" ,s.site_id as \"Site_ID\",r.name as \"Router_name\",r.ip as \"IP\", v.name as \"Vendor\", td.name as \"Router_type\"  FROM mobifone.router r  \n\njoin site s on s.id = r.site_id \n\njoin mobifone.province p on s.province_id = p.id \n\njoin mobifone.router_type t on r.router_type_id = t.id \n\njoin mobifone.vendor v on t.vendor_id = v.id \n\njoin transmission_device_type td on td.id = r.transmission_device_type_id  \nWHERE r.name = \"{{ $json.body.data.options[0].value }}\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -840,
+        1600
+      ],
+      "id": "99e765c0-67a3-4d69-a738-aece2e5a28e0",
+      "name": "MySQL2",
+      "credentials": {
+        "mySql": {
+          "id": "tyyI8ui63atTqUun",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -560,
+        1680
+      ],
+      "id": "f14dcd48-5abb-409b-bd44-bc0555383dd9",
+      "name": "Merge12"
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/ssh.py --use-textfsm --device_type {{ $json.deviceType }} --ip {{ $json.IP }} --user nghiem --password nghiem@123 --command '{{ $json.cliCommand }}' {{ $if($json.Vendor==\"Nokia\",\"--textfsm-template /app/scripts/textfsm_template/nokia_show_system_alarm.textfsm\",\"\")}} {{ $if($json.Vendor==\"Juniper\",\"--textfsm-template /app/scripts/textfsm_template/juniper_show_system_alarm.textfsm\",\"\")}} {{ $if($json.Vendor==\"Cisco\",\"--textfsm-template /app/scripts/textfsm_template/cisco_show_facility_alarm_status.textfsm\",\"\")}}\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -180,
+        1860
+      ],
+      "id": "c4cc1383-28ee-45f8-a1fa-7f3f470828e8",
+      "name": "Show version3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\n\n// Lấy thông tin từ các node trước đó\nconst commandType = inputData.command; // Ví dụ: 'cpu_usage', 'show_version', 'show_interface'\nconst routerVendor = (inputData.Vendor || 'unknown').toLowerCase(); // Vendor đã chuẩn hóa (ví dụ: 'cisco', 'nokia')\nconst routerIP = inputData.IP;\nconst routerName = inputData.Route_Name;\n\nlet cliCommand = null; // Biến để lưu câu lệnh CLI cuối cùng\nlet errorMessage = null; // Lưu thông báo lỗi nếu không tạo được lệnh\nlet deviceType = null;\n\n// --- Logic để ánh xạ commandType và routerVendor thành cliCommand ---\nswitch (routerVendor) {\n  case 'nokia':\n    deviceType = 'alcatel_sros'\n    break;\n  case 'juniper':\n    deviceType = 'juniper_junos'\n    break;\n     case 'cisco':\n    deviceType = 'cisco_xr'\n    break;\n}\nswitch (commandType) {\n    case 'get-cpu-usage':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show processes cpu | exclude 0.00%';\n                break;\n            case 'juniper':\n                cliCommand = 'show system processes extensive | match \"CPU\"';\n                break;\n            case 'nokia': // Alcatel-Lucent/Nokia SR OS\n                cliCommand = 'show system cpu';\n                break;\n            case 'huawei':\n                cliCommand = 'display cpu usage';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem CPU usage cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n     case 'get-alarm':\n        switch (routerVendor.toLowerCase()) {\n              case 'cisco':\n                cliCommand = 'show facility-alarm status';\n                break;\n              case 'juniper':\n                cliCommand = 'show system alarms';\n                break;\n              case 'nokia':\n                cliCommand = 'show system alarms';\n                break;\n              case 'huawei':\n                cliCommand = 'display alarm active';\n                break;\n              default:\n                errorMessage = `Không hỗ trợ xem alarm cho Vendor: ${routerVendor}.`;\n                break;\n            }\n        break;\n    case 'show-version':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show version';               \n                break;\n            case 'juniper':\n                cliCommand = 'show version';\n                break;\n            case 'nokia':\n                cliCommand = 'show system info'; // Ví dụ lệnh Nokia\n                break;\n            case 'huawei':\n                cliCommand = 'display version';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem version cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n\n    // case 'show_interface':\n    //     if (interfaceName) {\n    //         switch (routerVendor) {\n    //             case 'cisco':\n    //                 cliCommand = `show interface ${interfaceName}`;\n    //                 break;\n    //             case 'juniper':\n    //                 cliCommand = `show interfaces ${interfaceName}`;\n    //                 break;\n    //             case 'nokia':\n    //                 cliCommand = `show port ${interfaceName} detail`;\n    //                 break;\n    //             case 'huawei':\n    //                 cliCommand = `display interface ${interfaceName}`;\n    //                 break;\n    //             default:\n    //                 errorMessage = `Không hỗ trợ xem interface '${interfaceName}' cho Vendor: ${routerVendor}.`;\n    //                 break;\n    //         }\n    //     } else {\n    //         // Lệnh chung nếu không có tên interface cụ thể\n    //         switch (routerVendor) {\n    //             case 'cisco': cliCommand = 'show interface summary'; break;\n    //             case 'juniper': cliCommand = 'show interfaces terse'; break;\n    //             case 'nokia': cliCommand = 'show port detail'; break;\n    //             case 'huawei': cliCommand = 'display interface brief'; break;\n    //             default: errorMessage = `Không hỗ trợ xem tất cả interface cho Vendor: ${routerVendor}.`; break;\n    //         }\n    //     }\n    //     break;\n        \n    case 'ping':\n        if (routerIP) { // Cần IP để ping\n            switch (routerVendor) {\n                case 'cisco': cliCommand = `ping ${routerIP}`; break;\n                case 'juniper': cliCommand = `ping ${routerIP}`; break;\n                case 'nokia': cliCommand = `ping ${routerIP}`; break; // Ping là lệnh khá chuẩn\n                case 'huawei': cliCommand = `ping ${routerIP}`; break;\n                default: errorMessage = `Không hỗ trợ ping cho Vendor: ${routerVendor}.`; break;\n            }\n        } else {\n            errorMessage = \"Không có địa chỉ IP để thực hiện lệnh ping.\";\n        }\n        break;\n\n    // --- Thêm các case cho các loại lệnh khác của bạn ---\n    // Ví dụ: 'show_log', 'show_routes', 'config_vlan', v.v.\n\n    default:\n        errorMessage = `Loại lệnh '${commandType}' không được nhận diện hoặc không hỗ trợ.`;\n        break;\n}\n\n// --- Trả về đầu ra ---\nreturn [{\n    json: {\n        ...inputData, // Giữ lại tất cả thông tin đầu vào gốc (userRequest, channelId, threadTs, v.v.)\n        cliCommand: cliCommand, // Câu lệnh CLI đã được tạo động\n        commandExecutionError: errorMessage, // Thông báo lỗi nếu không tạo được lệnh\n        deviceType: deviceType\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -360,
+        1860
+      ],
+      "id": "15160f8a-9639-42d5-981f-e86ffe45b9f3",
+      "name": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce890d26-4879-4d48-805a-98024dc6242d",
+              "name": "user_id",
+              "value": "={{ $json.body.member.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7909a1cf-6b86-4a05-a1c4-9d3a3eba851e",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85dc6d4-982d-4cb2-bdf3-8221f3b5d6e0",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2cf6570f-41dd-4370-a920-14b1d056da8f",
+              "name": "router_name",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "51fe188a-e455-4be7-9774-0bed75dac75f",
+              "name": "user_name",
+              "value": "={{ $json.body.member.user.global_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4ca19c05-33c7-4a30-8db0-e7fe94d0af99",
+              "name": "message_id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8007ee0c-905a-45c8-b755-660fc5359809",
+              "name": "command",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -840,
+        1800
+      ],
+      "id": "a3eab255-654b-4916-a7e3-739984fcd6b6",
+      "name": "Edit Fields10"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -20,
+        1860
+      ],
+      "id": "efd18f18-d24d-42d5-9dc6-85e2f30ec991",
+      "name": "parse json"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.name as \"Province\" ,s.site_id as \"Site_ID\",r.name as \"Router_name\",r.ip as \"IP\", v.name as \"Vendor\", td.name as \"Router_type\"  FROM mobifone.router r  \n\njoin site s on s.id = r.site_id \n\njoin mobifone.province p on s.province_id = p.id \n\njoin mobifone.router_type t on r.router_type_id = t.id \n\njoin mobifone.vendor v on t.vendor_id = v.id \n\njoin transmission_device_type td on td.id = r.transmission_device_type_id  \nWHERE r.name = \"{{ $json.body.data.options[0].value }}\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -780,
+        2540
+      ],
+      "id": "0d7cf2cd-b69b-4d16-b009-a6b9145a0c79",
+      "name": "MySQL6",
+      "credentials": {
+        "mySql": {
+          "id": "tyyI8ui63atTqUun",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -540,
+        2640
+      ],
+      "id": "609c6758-1782-43a5-b8eb-ee589403321e",
+      "name": "Merge14"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\n\n// Lấy thông tin từ các node trước đó\nconst commandType = inputData.command; // Ví dụ: 'cpu_usage', 'show_version', 'show_interface'\nconst routerVendor = (inputData.Vendor || 'unknown').toLowerCase(); // Vendor đã chuẩn hóa (ví dụ: 'cisco', 'nokia')\nconst routerIP = inputData.IP;\nconst routerName = inputData.Route_Name;\n\nlet cliCommand = null; // Biến để lưu câu lệnh CLI cuối cùng\nlet errorMessage = null; // Lưu thông báo lỗi nếu không tạo được lệnh\nlet deviceType = null;\n\n// --- Logic để ánh xạ commandType và routerVendor thành cliCommand ---\nswitch (routerVendor) {\n  case 'nokia':\n    deviceType = 'alcatel_sros'\n    break;\n  case 'juniper':\n    deviceType = 'juniper_junos'\n    break;\n     case 'cisco':\n    deviceType = 'cisco_ios'\n    break;\n}\nswitch (commandType) {\n    case 'get-cpu-usage':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show processes cpu | exclude 0.00%';\n                break;\n            case 'juniper':\n                cliCommand = 'show system processes extensive | match \"CPU\"';\n                break;\n            case 'nokia': // Alcatel-Lucent/Nokia SR OS\n                cliCommand = 'show system cpu';\n                break;\n            case 'huawei':\n                cliCommand = 'display cpu usage';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem CPU usage cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n     case 'get-alarm':\n        switch (routerVendor.toLowerCase()) {\n              case 'cisco':\n                cliCommand = 'show logging | include (ERROR|CRITICAL|ALERT|EMERGENCY)';\n                break;\n              case 'juniper':\n                cliCommand = 'show system alarms';\n                break;\n              case 'nokia':\n                cliCommand = 'show system alarms';\n                break;\n              case 'huawei':\n                cliCommand = 'display alarm active';\n                break;\n              default:\n                errorMessage = `Không hỗ trợ xem alarm cho Vendor: ${routerVendor}.`;\n                break;\n            }\n        break;\n    //-----\n    case 'show-version':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show version';               \n                break;\n            case 'juniper':\n                cliCommand = 'show version';\n                break;\n            case 'nokia':\n                cliCommand = 'show system info'; // Ví dụ lệnh Nokia\n                break;\n            case 'huawei':\n                cliCommand = 'display version';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem version cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n    //---\ncase 'get-interface':\n    switch (routerVendor.toLowerCase()) {\n      case 'cisco':\n        cliCommand = 'show ip interface brief';\n        break;\n      case 'juniper':\n        cliCommand = 'show interfaces';\n        break;\n      case 'nokia':\n        cliCommand = 'show port';\n        break;\n      case 'huawei':\n        cliCommand = 'display interface brief';\n        break;\n      default:\n        errorMessage = `Không hỗ trợ xem interface cho Vendor: ${routerVendor}.`;\n        break;\n    }\n    break;\n    \n    // --- Thêm các case cho các loại lệnh khác của bạn ---\n    // Ví dụ: 'show_log', 'show_routes', 'config_vlan', v.v.\n\n    default:\n        errorMessage = `Loại lệnh '${commandType}' không được nhận diện hoặc không hỗ trợ.`;\n        break;\n}\n\n// --- Trả về đầu ra ---\nreturn [{\n    json: {\n        ...inputData, // Giữ lại tất cả thông tin đầu vào gốc (userRequest, channelId, threadTs, v.v.)\n        cliCommand: cliCommand, // Câu lệnh CLI đã được tạo động\n        commandExecutionError: errorMessage, // Thông báo lỗi nếu không tạo được lệnh\n        deviceType: deviceType\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        2800
+      ],
+      "id": "77cb9ee4-06f4-453f-94e5-f17535f4389b",
+      "name": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce890d26-4879-4d48-805a-98024dc6242d",
+              "name": "user_id",
+              "value": "={{ $json.body.member.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7909a1cf-6b86-4a05-a1c4-9d3a3eba851e",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85dc6d4-982d-4cb2-bdf3-8221f3b5d6e0",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2cf6570f-41dd-4370-a920-14b1d056da8f",
+              "name": "router_name",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "51fe188a-e455-4be7-9774-0bed75dac75f",
+              "name": "user_name",
+              "value": "={{ $json.body.member.user.global_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4ca19c05-33c7-4a30-8db0-e7fe94d0af99",
+              "name": "message_id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8007ee0c-905a-45c8-b755-660fc5359809",
+              "name": "command",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -780,
+        2740
+      ],
+      "id": "460b1f15-8686-4dc6-9588-e4acd99e7453",
+      "name": "Edit Fields11"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData,originalString: jsonString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        40,
+        2800
+      ],
+      "id": "c6870c68-d640-41f3-9837-e427a6341828",
+      "name": "parse json2"
+    },
+    {
+      "parameters": {
+        "content": "## GET ROUTER INTERFACE\n",
+        "height": 480,
+        "width": 2640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1260,
+        2520
+      ],
+      "typeVersion": 1,
+      "id": "90db723a-bf60-4952-bf25-201d7e1a438b",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT p.name as \"Province\" ,s.site_id as \"Site_ID\",r.name as \"Router_name\",r.ip as \"IP\", v.name as \"Vendor\", td.name as \"Router_type\"  FROM mobifone.router r  \n\njoin site s on s.id = r.site_id \n\njoin mobifone.province p on s.province_id = p.id \n\njoin mobifone.router_type t on r.router_type_id = t.id \n\njoin mobifone.vendor v on t.vendor_id = v.id \n\njoin transmission_device_type td on td.id = r.transmission_device_type_id  \nWHERE r.name = \"{{ $json.body.data.options[0].value }}\"",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.4,
+      "position": [
+        -760,
+        3120
+      ],
+      "id": "800f69d1-fdb2-4834-aa88-4be707b0f488",
+      "name": "MySQL7",
+      "credentials": {
+        "mySql": {
+          "id": "tyyI8ui63atTqUun",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -540,
+        3220
+      ],
+      "id": "a067dd97-adbf-42f0-9cef-a821eafede24",
+      "name": "Merge16"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ce890d26-4879-4d48-805a-98024dc6242d",
+              "name": "user_id",
+              "value": "={{ $json.body.member.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7909a1cf-6b86-4a05-a1c4-9d3a3eba851e",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b85dc6d4-982d-4cb2-bdf3-8221f3b5d6e0",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "2cf6570f-41dd-4370-a920-14b1d056da8f",
+              "name": "router_name",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "51fe188a-e455-4be7-9774-0bed75dac75f",
+              "name": "user_name",
+              "value": "={{ $json.body.member.user.global_name }}",
+              "type": "string"
+            },
+            {
+              "id": "4ca19c05-33c7-4a30-8db0-e7fe94d0af99",
+              "name": "message_id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "8007ee0c-905a-45c8-b755-660fc5359809",
+              "name": "command",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -760,
+        3320
+      ],
+      "id": "175e3d1a-1fd6-4a37-892b-b7e331e26294",
+      "name": "Edit Fields12"
+    },
+    {
+      "parameters": {
+        "content": "## GET INTERFACE OPTICAL\n",
+        "height": 480,
+        "width": 2440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1240,
+        3060
+      ],
+      "typeVersion": 1,
+      "id": "3f04e99f-179f-4d06-b57f-0f797e35a169",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputText = $input.first().json.text.replace(/\\\\n/g, '\\n'); // Thay \\\\n thành \\n\nconst maxLength = 1990; // Giới hạn ký tự, trừ đi 6 cho ``` và 4 cho an toàn\nconst messages = [];\n\n// Hàm chia chuỗi thành các đoạn dựa trên \\n\nfunction splitText(text, maxLength) {\n  const lines = text.split('\\n'); // Tách thành mảng các dòng\n  const result = [];\n  let current = '';\n\n  for (let line of lines) {\n    // Thêm dòng hiện tại + \\n vào current\n    const lineWithBreak = line + '\\n';\n    if (current.length + lineWithBreak.length <= maxLength) {\n      current += lineWithBreak;\n    } else {\n      if (current) result.push(current); // Đẩy đoạn hiện tại vào result\n      current = lineWithBreak; // Bắt đầu đoạn mới\n    }\n  }\n  if (current) result.push(current.trimEnd()); // Đẩy đoạn cuối, loại bỏ \\n thừa\n  return result;\n}\n\nconst splitMessages = splitText(inputText, maxLength);\nreturn splitMessages.map(message => ({ \n  json: {\n    formatedOutput: `\\`\\`\\`\\n${message}\\n\\`\\`\\``,\n    ...$input.first().json \n  } \n}))\n// Tạo output cho n8n\n// return {\n//   ... $input.first().json,\n//   messages : outputMessages\n// };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        2580
+      ],
+      "id": "b8a04876-1dd4-49e8-bb30-002f9e9d6dc7",
+      "name": "Split message1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['STT', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        2780
+      ],
+      "id": "d8fc3495-52b1-48cf-af15-199e209f1524",
+      "name": "Chuyển sang table text"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "rawOutput",
+        "options": {
+          "fileName": "interface_info.txt"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        2680
+      ],
+      "id": "71b2249d-8595-4e71-a939-d36a70f265e6",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "={{ $json.summary }}\nLog đính kèm :",
+        "options": {},
+        "files": {
+          "values": [
+            {
+              "inputFieldName": "=data"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        2600
+      ],
+      "id": "39921315-d484-4bdf-acb2-1066cc000e13",
+      "name": "Discord9",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1080,
+        2640
+      ],
+      "id": "d402ee81-ba66-46cc-b0a8-305d5b98b16f",
+      "name": "Merge18"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "459125d7-5264-487b-9aa2-dc31e492fd2b",
+              "name": "parsedData",
+              "value": "={{ $json.parsedData.parsed_output }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        2800
+      ],
+      "id": "dbb4bef7-ba43-48d2-af23-d642bf79f334",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ node trước (giả sử là hardware_data từ node SSH)\nconst hardwareData = $input.first().json.text|| '';\n\n// Định nghĩa giới hạn ký tự (2000 để phù hợp với Discord)\nconst MAX_LENGTH = 1500;\n\n// Hàm tóm tắt dữ liệu nếu vượt quá giới hạn\nfunction summarizeData(data) {\n  if (data.length <= MAX_LENGTH) {\n    return data; // Trả về toàn bộ nếu <= 2000 ký tự\n  } else {\n    // Cắt dữ liệu để vừa dưới 2000 ký tự, trừ đi phần câu hướng dẫn\n    const instruction = '\\nDo dữ liệu quá dài, thông tin được gửi kèm trong file.';\n    const availableLength = MAX_LENGTH - instruction.length;\n    return `\\`\\`\\`\\n${data.substring(0, availableLength)}\\n\\`\\`\\``\n      + instruction;\n  }\n}\n\n// Tạo output cho node\nreturn [{\n  json: {\n    summary: summarizeData(hardwareData), // Dữ liệu tóm tắt hoặc đầy đủ\n    full_data: hardwareData // Dữ liệu gốc để tạo file text\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        600,
+        2860
+      ],
+      "id": "be9beb6c-9b43-4b0a-aa2c-6808daa33902",
+      "name": "Sumary info"
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/ssh.py --use-textfsm --device_type {{ $json.deviceType }} --ip {{ $json.IP }} --user nghiem --password nghiem@123 --command '{{ $json.cliCommand }}' {{ $if($json.Vendor==\"Juniper\",\"--textfsm-template /app/scripts/textfsm_template/juniper_show_inf.textfsm\",\"\")}}\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -140,
+        2800
+      ],
+      "id": "7830ef64-cf77-450f-9457-e468299df275",
+      "name": "SSH call"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\n\n// Lấy thông tin từ các node trước đó\nconst commandType = inputData.command; // Ví dụ: 'cpu_usage', 'show_version', 'show_interface'\nconst routerVendor = (inputData.Vendor || 'unknown').toLowerCase(); // Vendor đã chuẩn hóa (ví dụ: 'cisco', 'nokia')\nconst routerIP = inputData.IP;\nconst routerName = inputData.Route_Name;\n\nlet cliCommand = null; // Biến để lưu câu lệnh CLI cuối cùng\nlet errorMessage = null; // Lưu thông báo lỗi nếu không tạo được lệnh\nlet deviceType = null;\n\n// --- Logic để ánh xạ commandType và routerVendor thành cliCommand ---\nswitch (routerVendor) {\n  case 'nokia':\n    deviceType = 'alcatel_sros'\n    break;\n  case 'juniper':\n    deviceType = 'juniper_junos'\n    break;\n     case 'cisco':\n    deviceType = 'cisco_xr'\n    break;\n}\nswitch (commandType) {\n    case 'get-cpu-usage':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show processes cpu sorted | exclude 0.00%';\n                break;\n            case 'juniper':\n                cliCommand = 'show system processes extensive';\n                break;\n            case 'nokia': // Alcatel-Lucent/Nokia SR OS\n                cliCommand = 'show system cpu';\n                break;\n            case 'huawei':\n                cliCommand = 'display cpu usage';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem CPU usage cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n     case 'get-alarm':\n        switch (routerVendor.toLowerCase()) {\n              case 'cisco':\n                cliCommand = 'show logging | include (ERROR|CRITICAL|ALERT|EMERGENCY)';\n                break;\n              case 'juniper':\n                cliCommand = 'show system alarms';\n                break;\n              case 'nokia':\n                cliCommand = 'show system alarms';\n                break;\n              case 'huawei':\n                cliCommand = 'display alarm active';\n                break;\n              default:\n                errorMessage = `Không hỗ trợ xem alarm cho Vendor: ${routerVendor}.`;\n                break;\n            }\n        break;\n    //-----\n    case 'show-version':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show version';               \n                break;\n            case 'juniper':\n                cliCommand = 'show version';\n                break;\n            case 'nokia':\n                cliCommand = 'show system info'; // Ví dụ lệnh Nokia\n                break;\n            case 'huawei':\n                cliCommand = 'display version';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem version cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n    //---\ncase 'get-interface':\n    switch (routerVendor.toLowerCase()) {\n      case 'cisco':\n        cliCommand = 'show interfaces status';\n        break;\n      case 'juniper':\n        cliCommand = 'show interfaces';\n        break;\n      case 'nokia':\n        cliCommand = 'show port';\n        break;\n      case 'huawei':\n        cliCommand = 'display interface brief';\n        break;\n      default:\n        errorMessage = `Không hỗ trợ xem interface cho Vendor: ${routerVendor}.`;\n        break;\n    }\n    break;\n    \n    // --- Thêm các case cho các loại lệnh khác của bạn ---\n    // Ví dụ: 'show_log', 'show_routes', 'config_vlan', v.v.\n\n    default:\n        errorMessage = `Loại lệnh '${commandType}' không được nhận diện hoặc không hỗ trợ.`;\n        break;\n}\n\n// --- Trả về đầu ra ---\nreturn [{\n    json: {\n        ...inputData, // Giữ lại tất cả thông tin đầu vào gốc (userRequest, channelId, threadTs, v.v.)\n        cliCommand: cliCommand, // Câu lệnh CLI đã được tạo động\n        commandExecutionError: errorMessage, // Thông báo lỗi nếu không tạo được lệnh\n        deviceType: deviceType\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -300,
+        320
+      ],
+      "id": "e2071d63-e25d-4375-ac79-fde46ebf98b8",
+      "name": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD5"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData,originalString: jsonString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        120,
+        320
+      ],
+      "id": "9e19e42e-7dc9-4e62-a190-442629aa1ab1",
+      "name": "parse json4"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "rawOutput",
+        "options": {
+          "fileName": "cpu_info.txt"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        780,
+        380
+      ],
+      "id": "10537e12-fa3d-47ad-9ab2-6ff84c52c011",
+      "name": "Convert to File1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9136fb3f-6d90-4b27-9cb8-9ba62d84ee71",
+              "name": "rawOutput",
+              "value": "={{ $json.parsedData.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        440,
+        380
+      ],
+      "id": "9e1cbdae-78e7-4989-aff6-5e469002b6bd",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "={{ $json.summary }}\nLog đính kèm :",
+        "options": {},
+        "files": {
+          "values": [
+            {
+              "inputFieldName": "=data"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        240
+      ],
+      "id": "f8b27225-4fe4-4c0f-91e8-1a39c15e02a8",
+      "name": "Discord10",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        980,
+        60
+      ],
+      "id": "4adba5a4-619b-4aef-9412-7858ec36137e",
+      "name": "Merge19"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "459125d7-5264-487b-9aa2-dc31e492fd2b",
+              "name": "parsedData",
+              "value": "={{ $json.parsedData.parsed_output }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {
+          "ignoreConversionErrors": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        440,
+        180
+      ],
+      "id": "acc0dfc3-adac-4515-9722-560d1075d952",
+      "name": "Edit Fields13"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ node trước (giả sử là hardware_data từ node SSH)\nconst hardwareData = $input.first().json.parsedData|| '';\n\n// Định nghĩa giới hạn ký tự (2000 để phù hợp với Discord)\nconst MAX_LENGTH = 1500;\n\n// Hàm tóm tắt dữ liệu nếu vượt quá giới hạn\nfunction summarizeData(data) {\n  if (data.length <= MAX_LENGTH) {\n    return `\\`\\`\\`\\n${data}\\n\\`\\`\\``; // Trả về toàn bộ nếu <= 2000 ký tự\n  } else {\n    // Cắt dữ liệu để vừa dưới 2000 ký tự, trừ đi phần câu hướng dẫn\n    const instruction = '\\nDo dữ liệu quá dài, thông tin được gửi kèm trong file.';\n    const availableLength = MAX_LENGTH - instruction.length;\n    return `\\`\\`\\`\\n${data.substring(0, availableLength)}\\n\\`\\`\\``\n      + instruction;\n  }\n}\n\n// Tạo output cho node\nreturn [{\n  json: {\n    summary: summarizeData(hardwareData), // Dữ liệu tóm tắt hoặc đầy đủ\n    full_data: hardwareData // Dữ liệu gốc để tạo file text\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        180
+      ],
+      "id": "1a6f90f0-e1b6-446e-b6a9-d1ebe2fe18be",
+      "name": "Sumary info1"
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/ssh.py --use-textfsm --device_type {{ $json.deviceType }} --ip {{ $json.IP }} --user nghiem --password nghiem@123 --command '{{ $json.cliCommand }}' {{ $if($json.Vendor==\"Juniper\",\"--textfsm-template /app/scripts/textfsm_template/juniper_show_inf.textfsm\",\"\")}}\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        320
+      ],
+      "id": "07024915-3964-46cf-a15d-438ec640bb4f",
+      "name": "SSH call1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\n\n// Lấy thông tin từ các node trước đó\nconst commandType = inputData.command; // Ví dụ: 'cpu_usage', 'show_version', 'show_interface'\nconst routerVendor = (inputData.Vendor || 'unknown').toLowerCase(); // Vendor đã chuẩn hóa (ví dụ: 'cisco', 'nokia')\nconst routerIP = inputData.IP;\nconst routerName = inputData.Route_Name;\n\nlet cliCommand = null; // Biến để lưu câu lệnh CLI cuối cùng\nlet errorMessage = null; // Lưu thông báo lỗi nếu không tạo được lệnh\nlet deviceType = null;\n\n// --- Logic để ánh xạ commandType và routerVendor thành cliCommand ---\nswitch (routerVendor) {\n  case 'nokia':\n    deviceType = 'alcatel_sros'\n    break;\n  case 'juniper':\n    deviceType = 'juniper_junos'\n    break;\n     case 'cisco':\n    deviceType = 'cisco_xr'\n    break;\n}\nswitch (commandType) {\n    case 'get-cpu-usage':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show processes cpu | exclude 0.00%';\n                break;\n            case 'juniper':\n                cliCommand = 'show system processes extensive | match \"CPU\"';\n                break;\n            case 'nokia': // Alcatel-Lucent/Nokia SR OS\n                cliCommand = 'show system cpu';\n                break;\n            case 'huawei':\n                cliCommand = 'display cpu usage';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem CPU usage cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n     case 'get-alarm':\n        switch (routerVendor.toLowerCase()) {\n              case 'cisco':\n                cliCommand = 'show logging | include (ERROR|CRITICAL|ALERT|EMERGENCY)';\n                break;\n              case 'juniper':\n                cliCommand = 'show system alarms';\n                break;\n              case 'nokia':\n                cliCommand = 'show system alarms';\n                break;\n              case 'huawei':\n                cliCommand = 'display alarm active';\n                break;\n              default:\n                errorMessage = `Không hỗ trợ xem alarm cho Vendor: ${routerVendor}.`;\n                break;\n            }\n        break;\n    //-----\n    case 'show-version':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show version';               \n                break;\n            case 'juniper':\n                cliCommand = 'show version';\n                break;\n            case 'nokia':\n                cliCommand = 'show system info'; // Ví dụ lệnh Nokia\n                break;\n            case 'huawei':\n                cliCommand = 'display version';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem version cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n    //---\ncase 'get-interface':\n    switch (routerVendor.toLowerCase()) {\n      case 'cisco':\n        cliCommand = 'show interfaces status';\n        break;\n      case 'juniper':\n        cliCommand = 'show interfaces';\n        break;\n      case 'nokia':\n        cliCommand = 'show port';\n        break;\n      case 'huawei':\n        cliCommand = 'display interface brief';\n        break;\n      default:\n        errorMessage = `Không hỗ trợ xem interface cho Vendor: ${routerVendor}.`;\n        break;\n    }\n    break;\n    \n    // --- Thêm các case cho các loại lệnh khác của bạn ---\n    // Ví dụ: 'show_log', 'show_routes', 'config_vlan', v.v.\n\n    default:\n        errorMessage = `Loại lệnh '${commandType}' không được nhận diện hoặc không hỗ trợ.`;\n        break;\n}\n\n// --- Trả về đầu ra ---\nreturn [{\n    json: {\n        ...inputData, // Giữ lại tất cả thông tin đầu vào gốc (userRequest, channelId, threadTs, v.v.)\n        cliCommand: cliCommand, // Câu lệnh CLI đã được tạo động\n        commandExecutionError: errorMessage, // Thông báo lỗi nếu không tạo được lệnh\n        deviceType: deviceType\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -340,
+        1280
+      ],
+      "id": "16014e30-0d57-4c65-8020-145f7c0bf099",
+      "name": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData,originalString: jsonString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        20,
+        1280
+      ],
+      "id": "6a46a8b7-8903-44b2-af6a-09e714ed4e69",
+      "name": "parse json5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['STT', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        540,
+        1140
+      ],
+      "id": "3979d2f7-8fc6-4832-a8d5-6454353aaf25",
+      "name": "Chuyển sang table text2"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "rawOutput",
+        "options": {
+          "fileName": "cpu_info.txt"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        680,
+        1340
+      ],
+      "id": "7b57f0a6-f8e0-4977-8e6b-70489acc21f1",
+      "name": "Convert to File2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9136fb3f-6d90-4b27-9cb8-9ba62d84ee71",
+              "name": "rawOutput",
+              "value": "={{ $json.parsedData.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        340,
+        1340
+      ],
+      "id": "a5c70810-30db-49cf-b924-32ede64384a3",
+      "name": "Edit Fields14"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "={{ $json.summary }}\nLog đính kèm :",
+        "options": {},
+        "files": {
+          "values": [
+            {
+              "inputFieldName": "=data"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        1200
+      ],
+      "id": "5540e480-62e4-4137-9a8d-98646a893680",
+      "name": "Discord11",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        860,
+        1080
+      ],
+      "id": "9d4b1fb1-4f0d-4756-b270-e8d41a82d289",
+      "name": "Merge20"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "459125d7-5264-487b-9aa2-dc31e492fd2b",
+              "name": "parsedData",
+              "value": "={{ $json.parsedData.parsed_output }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        340,
+        1140
+      ],
+      "id": "5b35fdca-4006-40ac-9665-19a594bf6231",
+      "name": "Edit Fields15"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ node trước (giả sử là hardware_data từ node SSH)\nconst hardwareData = $input.first().json.text|| '';\n\n// Định nghĩa giới hạn ký tự (2000 để phù hợp với Discord)\nconst MAX_LENGTH = 1500;\n\n// Hàm tóm tắt dữ liệu nếu vượt quá giới hạn\nfunction summarizeData(data) {\n  if (data.length <= MAX_LENGTH) {\n    return data; // Trả về toàn bộ nếu <= 2000 ký tự\n  } else {\n    // Cắt dữ liệu để vừa dưới 2000 ký tự, trừ đi phần câu hướng dẫn\n    const instruction = '\\nDo dữ liệu quá dài, thông tin được gửi kèm trong file.';\n    const availableLength = MAX_LENGTH - instruction.length;\n    return `\\`\\`\\`\\n${data.substring(0, availableLength)}\\n\\`\\`\\``\n      + instruction;\n  }\n}\n\n// Tạo output cho node\nreturn [{\n  json: {\n    summary: summarizeData(hardwareData), // Dữ liệu tóm tắt hoặc đầy đủ\n    full_data: hardwareData // Dữ liệu gốc để tạo file text\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        1140
+      ],
+      "id": "43cc94e5-c522-4ee8-8f05-eaf12b4514de",
+      "name": "Sumary info2"
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/ssh.py --use-textfsm --device_type {{ $json.deviceType }} --ip {{ $json.IP }} --user nghiem --password nghiem@123 --command '{{ $json.cliCommand }}' {{ $if($json.Vendor==\"Juniper\",\"--textfsm-template /app/scripts/textfsm_template/juniper_show_inf.textfsm\",\"\")}}\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        1280
+      ],
+      "id": "f350713a-4bdc-468c-9cc7-bfc70e3546ab",
+      "name": "SSH call2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputData = $input.first().json;\n\n// Lấy thông tin từ các node trước đó\nconst commandType = inputData.command; // Ví dụ: 'cpu_usage', 'show_version', 'show_interface'\nconst routerVendor = (inputData.Vendor || 'unknown').toLowerCase(); // Vendor đã chuẩn hóa (ví dụ: 'cisco', 'nokia')\nconst routerIP = inputData.IP;\nconst routerName = inputData.Route_Name;\n\nlet cliCommand = null; // Biến để lưu câu lệnh CLI cuối cùng\nlet errorMessage = null; // Lưu thông báo lỗi nếu không tạo được lệnh\nlet deviceType = null;\n\n// --- Logic để ánh xạ commandType và routerVendor thành cliCommand ---\nswitch (routerVendor) {\n  case 'nokia':\n    deviceType = 'alcatel_sros'\n    break;\n  case 'juniper':\n    deviceType = 'juniper_junos'\n    break;\n     case 'cisco':\n    deviceType = 'cisco_ios'\n    break;\n}\nswitch (commandType) {\n    case 'get-cpu-usage':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show processes cpu | exclude 0.00%';\n                break;\n            case 'juniper':\n                cliCommand = 'show system processes extensive | match \"CPU\"';\n                break;\n            case 'nokia': // Alcatel-Lucent/Nokia SR OS\n                cliCommand = 'show system cpu';\n                break;\n            case 'huawei':\n                cliCommand = 'display cpu usage';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem CPU usage cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n     case 'get-alarm':\n        switch (routerVendor.toLowerCase()) {\n              case 'cisco':\n                cliCommand = 'show logging | include (ERROR|CRITICAL|ALERT|EMERGENCY)';\n                break;\n              case 'juniper':\n                cliCommand = 'show system alarms';\n                break;\n              case 'nokia':\n                cliCommand = 'show system alarms';\n                break;\n              case 'huawei':\n                cliCommand = 'display alarm active';\n                break;\n              default:\n                errorMessage = `Không hỗ trợ xem alarm cho Vendor: ${routerVendor}.`;\n                break;\n            }\n        break;\n    //-----\n    case 'show-version':\n        switch (routerVendor) {\n            case 'cisco':\n                cliCommand = 'show version';               \n                break;\n            case 'juniper':\n                cliCommand = 'show version';\n                break;\n            case 'nokia':\n                cliCommand = 'show system info'; // Ví dụ lệnh Nokia\n                break;\n            case 'huawei':\n                cliCommand = 'display version';\n                break;\n            default:\n                errorMessage = `Không hỗ trợ xem version cho Vendor: ${routerVendor}.`;\n                break;\n        }\n        break;\n    //---\ncase 'get-interface':\n    switch (routerVendor.toLowerCase()) {\n      case 'cisco':\n        cliCommand = 'show ip interface brief';\n        break;\n      case 'juniper':\n        cliCommand = 'show interfaces';\n        break;\n      case 'nokia':\n        cliCommand = 'show port';\n        break;\n      case 'huawei':\n        cliCommand = 'display interface brief';\n        break;\n      default:\n        errorMessage = `Không hỗ trợ xem interface cho Vendor: ${routerVendor}.`;\n        break;\n    }\n    break;\n\n    case 'get-optical':\n          switch (routerVendor.toLowerCase()) {\n      case 'cisco':\n        cliCommand = 'show interfaces transceiver';\n        break;\n      case 'juniper':\n        cliCommand = 'show interfaces diagnostics optics';\n        break;\n      case 'nokia':\n        cliCommand = 'show port detail';\n        break;\n      case 'huawei':\n        cliCommand = 'display transceiver';\n        break;\n      default:\n        errorMessage = `Không hỗ trợ xem mức công suất quang cho Vendor: ${routerVendor}.`;\n        break;\n    }\n    break;\n    \n    // --- Thêm các case cho các loại lệnh khác của bạn ---\n    // Ví dụ: 'show_log', 'show_routes', 'config_vlan', v.v.\n\n    default:\n        errorMessage = `Loại lệnh '${commandType}' không được nhận diện hoặc không hỗ trợ.`;\n        break;\n}\n\n// --- Trả về đầu ra ---\nreturn [{\n    json: {\n        ...inputData, // Giữ lại tất cả thông tin đầu vào gốc (userRequest, channelId, threadTs, v.v.)\n        cliCommand: cliCommand, // Câu lệnh CLI đã được tạo động\n        commandExecutionError: errorMessage, // Thông báo lỗi nếu không tạo được lệnh\n        deviceType: deviceType\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -140,
+        3340
+      ],
+      "id": "ce5a1501-1a77-4733-a137-8b689b826fcd",
+      "name": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD4"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy chuỗi từ input của node Code.\n// Ví dụ: Chuỗi JSON từ stdout của Execute Command\nconst jsonString = $input.first().json.stdout; // Thay 'yourStringVariable' bằng tên biến chứa chuỗi JSON\n\nlet parsedData = null;\nlet errorMessage = null;\n\ntry {\n    // --- Chuyển đổi chuỗi thành đối tượng JSON ---\n    parsedData = JSON.parse(jsonString);\n} catch (e) {\n    // Xử lý lỗi nếu chuỗi không phải là JSON hợp lệ\n    errorMessage = `Lỗi parse JSON: <span class=\"math-inline\">\\{e\\.message\\}\\. Chuỗi gốc\\:\\\\n</span>{jsonString}`;\n    console.error(errorMessage);\n    // Bạn có thể trả về một đối tượng lỗi hoặc null nếu parse thất bại\n    return [{ json: { success: false, error: errorMessage, originalString: jsonString } }];\n}\n\n// --- Trả về kết quả đã parse ---\n// Giờ bạn có thể sử dụng 'parsedData' như một đối tượng JavaScript/JSON\nreturn [{ json: { success: true, parsedData: parsedData,originalString: jsonString } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        3340
+      ],
+      "id": "99bd7cd0-a48d-4984-bf2e-15e4cffd4ad5",
+      "name": "parse json3"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "rawOutput",
+        "options": {
+          "fileName": "interface_info.txt"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1020,
+        3400
+      ],
+      "id": "ec4fd54b-8f44-4f63-a139-a6ad99b3c342",
+      "name": "Convert to File3"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "=**THÔNG TIN MỨC THU CỦA ROUTER **\n{{ $json.summary }}\n__Log đính kèm:__",
+        "options": {},
+        "files": {
+          "values": [
+            {
+              "inputFieldName": "=data"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1420,
+        3260
+      ],
+      "id": "fc01ef7c-b4cf-40b7-b0c9-eedf7d58dc5c",
+      "name": "Discord12",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1180,
+        3080
+      ],
+      "id": "b3dbbfee-7fad-4a94-b049-9fb84b90bee6",
+      "name": "Merge21"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ node trước (giả sử là hardware_data từ node SSH)\nconst hardwareData =  $input.first().json.text|| '';\n\n// Định nghĩa giới hạn ký tự (2000 để phù hợp với Discord)\nconst MAX_LENGTH = 1900;\n\n// Hàm tóm tắt dữ liệu nếu vượt quá giới hạn\nfunction summarizeData(data) {\n  if (data.length <= MAX_LENGTH) {\n    return `\\`\\`\\`\\n${data}\\n\\`\\`\\``; // Trả về toàn bộ nếu <= 2000 ký tự\n  } else {\n    // Cắt dữ liệu để vừa dưới 2000 ký tự, trừ đi phần câu hướng dẫn\n    const instruction = '\\nDo dữ liệu quá dài so với giới hạn tin nhắn, thông tin đầy đủ được gửi kèm trong file.';\n    const availableLength = MAX_LENGTH - instruction.length;\n    return `\\`\\`\\`\\n${data.substring(0, availableLength)}\\n\\`\\`\\``\n      + instruction;\n  }\n}\n\n// Tạo output cho node\nreturn [{\n  json: {\n    summary: summarizeData(hardwareData), // Dữ liệu tóm tắt hoặc đầy đủ\n    full_data: hardwareData // Dữ liệu gốc để tạo file text\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        3160
+      ],
+      "id": "6eec481d-e32f-44d4-b75f-1018f709bf5f",
+      "name": "Sumary info3"
+    },
+    {
+      "parameters": {
+        "command": "=python /app/scripts/ssh.py --use-textfsm --device_type {{ $json.deviceType }} --ip {{ $json.IP }} --user nghiem --password nghiem@123 --command '{{ $json.cliCommand }}' {{ $if($json.Vendor==\"Nokia\",\"--textfsm-template /app/scripts/textfsm_template/nokia_show_optical.textfsm\",\"\")}} {{ $if($json.Vendor==\"Juniper\",\"--textfsm-template /app/scripts/textfsm_template/juniper_show_optical.textfsm\",\"\")}} {{ $if($json.Vendor==\"Cisco\",\"--textfsm-template /app/scripts/textfsm_template/cisco_show_optical.textfsm\",\"\")}}\n\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        120,
+        3340
+      ],
+      "id": "6e28f6ba-62d9-467d-a17b-a6bfc53519e2",
+      "name": "SSH call3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "459125d7-5264-487b-9aa2-dc31e492fd2b",
+              "name": "parsedData",
+              "value": "={{ $json.parsedData.parsed_output }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        3160
+      ],
+      "id": "1e7e825f-110d-4715-8ce3-a10cc50cdc74",
+      "name": "Edit Fields17"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['STT', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        3160
+      ],
+      "id": "c38281b7-8403-4af1-9d40-a8c018985536",
+      "name": "Chuyển sang table text1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9136fb3f-6d90-4b27-9cb8-9ba62d84ee71",
+              "name": "rawOutput",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        860,
+        3400
+      ],
+      "id": "b5a599d0-981f-4fc1-aa3c-2da388d9417e",
+      "name": "Edit Fields16"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9136fb3f-6d90-4b27-9cb8-9ba62d84ee71",
+              "name": "rawOutput",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        2680
+      ],
+      "id": "4d296bc9-4e7e-4c52-b02a-c40cb7d979ce",
+      "name": "Edit Fields18"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['STT', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        1640
+      ],
+      "id": "2f7d5fff-304a-4371-b35a-e9b55ac7331e",
+      "name": "Chuyển sang table text3"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "rawOutput",
+        "options": {
+          "fileName": "interface_info.txt"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        820,
+        1820
+      ],
+      "id": "03c4c676-1950-43d6-932e-10e7e142c5ab",
+      "name": "Convert to File4"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1382209881649713345",
+          "mode": "list",
+          "cachedResultName": "Phòng TD",
+          "cachedResultUrl": "https://discord.com/channels/1382209881649713345"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $json.channel_id }}",
+          "mode": "id"
+        },
+        "content": "=**Thông tin cảnh báo router : {{ $json.router_name }}**\n{{ $json.summary }}\n__Log đính kèm:__",
+        "options": {},
+        "files": {
+          "values": [
+            {
+              "inputFieldName": "=data"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        1580
+      ],
+      "id": "abb27b0e-8944-4660-8da4-07f45e69a59b",
+      "name": "Discord13",
+      "webhookId": "976c13ef-b741-4d1d-af10-c53393c9ccde",
+      "credentials": {
+        "discordBotApi": {
+          "id": "zV1OviH6ynmgtWzN",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "numberInputs": 3,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        960,
+        1580
+      ],
+      "id": "9dddf6ce-550e-41dc-8c1d-6765343ba5e1",
+      "name": "Merge22"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "459125d7-5264-487b-9aa2-dc31e492fd2b",
+              "name": "parsedData",
+              "value": "={{ $json.parsedData.parsed_output }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        1640
+      ],
+      "id": "60559dca-7c5d-4fc8-82fc-0c7f96e8d243",
+      "name": "Edit Fields19"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lấy dữ liệu từ node trước (giả sử là hardware_data từ node SSH)\nconst hardwareData = $input.first().json.text|| '';\n\n// Định nghĩa giới hạn ký tự (2000 để phù hợp với Discord)\nconst MAX_LENGTH = 1500;\n\n// Hàm tóm tắt dữ liệu nếu vượt quá giới hạn\nfunction summarizeData(data) {\n  if (data.length <= MAX_LENGTH) {\n    return `\\`\\`\\`\\n${data}\\n\\`\\`\\``; // Trả về toàn bộ nếu <= 2000 ký tự\n  } else {\n    // Cắt dữ liệu để vừa dưới 2000 ký tự, trừ đi phần câu hướng dẫn\n    const instruction = '\\nDo dữ liệu quá dài, thông tin được gửi kèm trong file.';\n    const availableLength = MAX_LENGTH - instruction.length;\n    return `\\`\\`\\`\\n${data.substring(0, availableLength)}\\n\\`\\`\\``\n      + instruction;\n  }\n}\n\n// Tạo output cho node\nreturn [{\n  json: {\n    summary: summarizeData(hardwareData), // Dữ liệu tóm tắt hoặc đầy đủ\n    full_data: hardwareData // Dữ liệu gốc để tạo file text\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        1640
+      ],
+      "id": "d3d57e1d-95db-4302-8a58-1e470d093022",
+      "name": "Sumary info4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9136fb3f-6d90-4b27-9cb8-9ba62d84ee71",
+              "name": "rawOutput",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        600,
+        1820
+      ],
+      "id": "3900fbf2-bb39-4e97-a390-3ea4e56ec706",
+      "name": "Edit Fields20"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "MySQL",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MySQL1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tra cứu IP của router",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MySQL3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MySQL2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MySQL6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "MySQL7",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Discord3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL1": {
+      "main": [
+        [
+          {
+            "node": "Merge6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL3": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ping test": {
+      "main": [
+        [
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Tra cứu IP của router": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Ping test",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge4": {
+      "main": [
+        [
+          {
+            "node": "Định dang blockcode ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "Định dang blockcode 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge6": {
+      "main": [
+        [
+          {
+            "node": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Định dang blockcode ": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Định dang blockcode 1": {
+      "main": [
+        [
+          {
+            "node": "Discord1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields9": {
+      "main": [
+        [
+          {
+            "node": "Merge6",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "MySQL2": {
+      "main": [
+        [
+          {
+            "node": "Merge12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge12": {
+      "main": [
+        [
+          {
+            "node": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge22",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Show version3": {
+      "main": [
+        [
+          {
+            "node": "parse json",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD2": {
+      "main": [
+        [
+          {
+            "node": "Show version3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "Merge12",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "parse json": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL6": {
+      "main": [
+        [
+          {
+            "node": "Merge14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge14": {
+      "main": [
+        [
+          {
+            "node": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD3": {
+      "main": [
+        [
+          {
+            "node": "SSH call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields11": {
+      "main": [
+        [
+          {
+            "node": "Merge14",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "parse json2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MySQL7": {
+      "main": [
+        [
+          {
+            "node": "Merge16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge16": {
+      "main": [
+        [
+          {
+            "node": "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields12": {
+      "main": [
+        [
+          {
+            "node": "Merge16",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Split message1": {
+      "main": [
+        []
+      ]
+    },
+    "Chuyển sang table text": {
+      "main": [
+        [
+          {
+            "node": "Sumary info",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Merge18",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge18": {
+      "main": [
+        [
+          {
+            "node": "Discord9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sumary info": {
+      "main": [
+        [
+          {
+            "node": "Merge18",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "SSH call": {
+      "main": [
+        [
+          {
+            "node": "parse json2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD5": {
+      "main": [
+        [
+          {
+            "node": "SSH call1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse json4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File1": {
+      "main": [
+        [
+          {
+            "node": "Merge19",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Convert to File1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge19": {
+      "main": [
+        [
+          {
+            "node": "Discord10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields13": {
+      "main": [
+        [
+          {
+            "node": "Sumary info1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sumary info1": {
+      "main": [
+        [
+          {
+            "node": "Merge19",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "SSH call1": {
+      "main": [
+        [
+          {
+            "node": "parse json4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD": {
+      "main": [
+        [
+          {
+            "node": "SSH call2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse json5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields14",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text2": {
+      "main": [
+        [
+          {
+            "node": "Sumary info2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File2": {
+      "main": [
+        [
+          {
+            "node": "Merge20",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields14": {
+      "main": [
+        [
+          {
+            "node": "Convert to File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge20": {
+      "main": [
+        [
+          {
+            "node": "Discord11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields15": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sumary info2": {
+      "main": [
+        [
+          {
+            "node": "Merge20",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "SSH call2": {
+      "main": [
+        [
+          {
+            "node": "parse json5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NODE PHÂN LOẠI LỆNH VÀ DEVICE ĐỂ CÓ CLICMD4": {
+      "main": [
+        [
+          {
+            "node": "SSH call3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse json3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File3": {
+      "main": [
+        [
+          {
+            "node": "Merge21",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge21": {
+      "main": [
+        [
+          {
+            "node": "Discord12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sumary info3": {
+      "main": [
+        [
+          {
+            "node": "Merge21",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "SSH call3": {
+      "main": [
+        [
+          {
+            "node": "parse json3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields17": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text1": {
+      "main": [
+        [
+          {
+            "node": "Sumary info3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields16": {
+      "main": [
+        [
+          {
+            "node": "Convert to File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields18": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text3": {
+      "main": [
+        [
+          {
+            "node": "Sumary info4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File4": {
+      "main": [
+        [
+          {
+            "node": "Merge22",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge22": {
+      "main": [
+        [
+          {
+            "node": "Discord13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields19": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sumary info4": {
+      "main": [
+        [
+          {
+            "node": "Merge22",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields20": {
+      "main": [
+        [
+          {
+            "node": "Convert to File4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cfcb544e-2024-416a-938c-ab06e70f3a39",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fed535408ed45d741f945d1aea32a1746e2ccd7038d300e0e52b3dfdfc1d0d01"
+  },
+  "id": "No0wCXeDp4cZ5vui",
+  "tags": []
+}

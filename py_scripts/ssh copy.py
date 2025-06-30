@@ -1,15 +1,12 @@
 from netmiko import ConnectHandler
-from netmiko.exceptions import NetmikoAuthenticationException, NetmikoTimeoutException
+from netmiko.exceptions import NetmikoAuthenticationException, NetmikoTimeoutException, ReadTimeout
 import sys
 import json
 import argparse
-import textfsm
-from netmiko.utilities import get_structured_data
 
 def ssh_to_router_with_netmiko(device_type, hostname, username, password, command, use_textfsm=False, textfsm_template=None, port=22, timeout=10):
     """
     Kết nối SSH tới một thiết bị router bằng Netmiko và thực hiện một câu lệnh.
-    Trả về cả output thô và output đã được phân tích (nếu có).
 
     Args:
         device_type (str): Kiểu thiết bị (ví dụ: 'juniper', 'cisco_ios', 'arista_eos', v.v.).
@@ -20,7 +17,6 @@ def ssh_to_router_with_netmiko(device_type, hostname, username, password, comman
         command (str): Câu lệnh CLI cần thực hiện.
         use_textfsm (bool): True nếu muốn parse output bằng TextFSM.
         textfsm_template (str, optional): Đường dẫn đến file template TextFSM tùy chỉnh.
-                                           Nếu không cung cấp, sẽ sử dụng ntc-templates.
         port (int): Cổng SSH (mặc định là 22).
         timeout (int): Thời gian chờ kết nối (mặc định là 10 giây).
 
@@ -37,51 +33,47 @@ def ssh_to_router_with_netmiko(device_type, hostname, username, password, comman
         'global_delay_factor': 2 # Tăng độ trễ giữa các lệnh nếu thiết bị chậm phản hồi
     }
 
+    net_connect = None
     output = None
     parsed_output = None
     error_message = None
     success = False
 
     try:
-        # Sử dụng 'with' để đảm bảo kết nối được đóng tự động
-        with ConnectHandler(**device_params) as net_connect:
-            
-            # 1. Luôn chạy lệnh để lấy output thô
+        # Kết nối tới thiết bị
+        net_connect = ConnectHandler(**device_params)
+
+        # Thực thi lệnh
+        if use_textfsm:
+            try:
+                # Gửi lệnh và tự động parse bằng TextFSM
+                parsed_output = net_connect.send_command(
+                    command, use_textfsm=True, textfsm_template=textfsm_template, read_timeout=120
+                )
+                success = True
+            except ReadTimeout:
+                # Lỗi này thường xảy ra khi TextFSM không tìm thấy template hoặc output không khớp.
+                # Ta vẫn coi là thành công về mặt kết nối và chạy lệnh.
+                success = True
+                error_message = "Lỗi phân tích TextFSM (không tìm thấy template hoặc output không khớp). Trả về output thô."
+                # Cố gắng lấy output thô
+                output = net_connect.send_command(command, use_textfsm=False, read_timeout=120)
+        else:
+            # Chạy lệnh và lấy kết quả thô
             output = net_connect.send_command(command, read_timeout=120)
-            success = True # Nếu lệnh thất bại, Netmiko sẽ ném ra exception
-
-            # 2. Nếu yêu cầu, phân tích output thô bằng TextFSM
-            if use_textfsm:
-                try:
-                    if textfsm_template:
-                        # Sử dụng template tùy chỉnh do người dùng cung cấp
-                        with open(textfsm_template) as template_file:
-                            fsm = textfsm.TextFSM(template_file)
-                            parsed_output = fsm.ParseTextToDicts(output)
-                    else:
-                        # Sử dụng thư viện ntc-templates tích hợp của Netmiko
-                        parsed_output = get_structured_data(output, platform=device_type, command=command)
-
-                    # Kiểm tra nếu parsing không trả về kết quả nào
-                    if not parsed_output:
-                        error_message = "Phân tích TextFSM không tìm thấy dữ liệu khớp. Output có thể không đúng định dạng hoặc template không phù hợp."
-
-                except FileNotFoundError:
-                    error_message = f"Lỗi phân tích TextFSM: File template '{textfsm_template}' không tồn tại."
-                except Exception as e:
-                    # Bắt các lỗi parsing khác (ví dụ: ntc-templates chưa cài, lỗi cú pháp template)
-                    error_message = f"Lỗi trong quá trình phân tích TextFSM: {e}"
+            success = True
 
     except NetmikoAuthenticationException:
         error_message = "Lỗi xác thực: Tên người dùng hoặc mật khẩu không đúng."
-        success = False
     except NetmikoTimeoutException:
         error_message = "Lỗi timeout: Không thể kết nối hoặc thiết bị không phản hồi."
-        success = False
     except Exception as e:
-        # Bắt các lỗi chung khác (ví dụ: lỗi kết nối, lệnh không hợp lệ...)
+        # Bắt các lỗi chung khác
         error_message = f"Đã xảy ra lỗi không mong muốn: {e}"
-        success = False
+    finally:
+        # Đảm bảo kết nối được đóng, ngay cả khi có lỗi
+        if net_connect:
+            net_connect.disconnect()
 
     return {
         'success': success,
