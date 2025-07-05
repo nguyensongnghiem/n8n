@@ -121,5 +121,5 @@ if __name__ == "__main__":
     print(json.dumps(result, indent=2))
 
     # Nếu có lỗi, thoát với mã lỗi khác 0
-    if not result.get('success'):
-        sys.exit(1)
+    # if not result.get('success'):
+    #     sys.exit(1)
