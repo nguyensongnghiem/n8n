@@ -1,0 +1,1911 @@
+{
+  "name": "Web Chatbot Slash Command",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "get-info",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "8a98fc79-f940-4e46-af36-7ee4e7a1b47a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get-info"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7028f0a7-9f9b-4de1-8718-e4043d625d26",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "get-cpu-usage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get-cpu-usage"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1ebc0c3c-1af8-41cd-b79a-227fddf33871",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "/show-version",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "show-version"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "eb7d6d8d-a74b-45af-8698-bd1a89f4a5f6",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "get-fo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get-fo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1276cc42-1397-45b5-b2fb-19b5d8332bb5",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "ping",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ping"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7e764fdd-ad3b-41a6-b294-216efe291ab3",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "get-alarm",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get Alarm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1b46047e-b5a7-4544-95a1-d26241769ff8",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "get-interface",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get interface"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "62145df5-24ed-4a43-82f5-64d0aaac651f",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "get-optical",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get optical"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "744081de-7871-4bce-ab64-718cc960aca5",
+                    "leftValue": "={{ $json.command.name }}",
+                    "rightValue": "get-hardware",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "get-hardware"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1060,
+        1080
+      ],
+      "id": "e5a7abcd-0824-41af-85de-cbdeeb6b28e3",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3b81d8d9-0b7f-4e2e-9a5f-45140c90a4d6",
+              "name": "channel_id",
+              "value": "={{ $json.body.channel.id }}",
+              "type": "string"
+            },
+            {
+              "id": "abe95187-4f55-481c-a70f-52524c261111",
+              "name": "channel_name",
+              "value": "={{ $json.body.channel.name }}",
+              "type": "string"
+            },
+            {
+              "id": "c018f5c6-a6d5-454a-b426-b3562a8a053e",
+              "name": "user_id",
+              "value": "={{ $json.body.user.id }}",
+              "type": "string"
+            },
+            {
+              "id": "e5590611-b55c-4f1b-a662-2da4891c2660",
+              "name": "username",
+              "value": "={{ $json.body.user.global_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d47c6624-e08c-4325-a179-142d5dbdf10a",
+              "name": "command.id",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "f108339d-a06b-4149-84d6-795682e1fc18",
+              "name": "command.name",
+              "value": "={{ $json.body.data.name }}",
+              "type": "string"
+            },
+            {
+              "id": "b268da0a-6fb8-45a2-bca6-1dfb21a32a85",
+              "name": "command.options[0].name",
+              "value": "={{ $json.body.data.options[0].name }}",
+              "type": "string"
+            },
+            {
+              "id": "1bfab6a9-e9b3-437c-86aa-50bd1f273b7b",
+              "name": "command.options[0].value",
+              "value": "={{ $json.body.data.options[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "0beb25bb-256f-41f9-ac73-5babba497f4c",
+              "name": "token",
+              "value": "={{ $json.body.token }}",
+              "type": "string"
+            },
+            {
+              "id": "5f5eb940-e1ec-4369-904d-d6c0fd3c183c",
+              "name": "application_id",
+              "value": "={{ $json.body.application_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1280,
+        1180
+      ],
+      "id": "1815f0b8-f27f-4422-851f-3d3f2376b5e7",
+      "name": "InputSet"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bf2cac0d-845d-4d61-979f-31dcc0ad2e4c",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1540,
+        1180
+      ],
+      "id": "7a5f7d26-c22d-4934-8475-d71f0cbd628c",
+      "name": "Webhook1",
+      "webhookId": "bf2cac0d-845d-4d61-979f-31dcc0ad2e4c"
+    },
+    {
+      "parameters": {
+        "content": "## GET CPU USSAGE\n",
+        "height": 400,
+        "width": 1800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        40
+      ],
+      "typeVersion": 1,
+      "id": "d38d4b3b-d9f9-43d0-b2d1-b105b7deed72",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sF1tJkr494j2hDoR",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -260,
+        220
+      ],
+      "id": "437ede86-5d18-4a3d-81ae-e99165320d83",
+      "name": "SearchRouterAndCommand"
+    },
+    {
+      "parameters": {
+        "command": "=ping -c 5  {{ $json.IP }}\n"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        0,
+        560
+      ],
+      "id": "f66eb35f-81cd-4877-91d4-138014666b3e",
+      "name": "Ping test"
+    },
+    {
+      "parameters": {
+        "content": "## PING TO A ROUTER USSING ROUTER NAME\n",
+        "height": 260,
+        "width": 1800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "fefdfde9-0ce4-46d0-8b3c-d66dc90182f5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sF1tJkr494j2hDoR",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        560
+      ],
+      "id": "c13ad9bb-a6ca-430e-b5ea-5f6ab0ca57f5",
+      "name": "SearchRouterAndCommand1"
+    },
+    {
+      "parameters": {
+        "content": "## GET CURRRENT ALARM\n",
+        "height": 320,
+        "width": 1800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        820
+      ],
+      "typeVersion": 1,
+      "id": "e45f7a17-0489-4afa-bda0-ee97e8318473",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sF1tJkr494j2hDoR",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        960
+      ],
+      "id": "27fe37a4-35f5-45d9-84db-d1f133af3629",
+      "name": "SearchRouterAndCommand2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['#', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        960
+      ],
+      "id": "38fe33dc-94bd-4289-8ea9-ab1c94bb9f0f",
+      "name": "Chuyển sang table text3"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sF1tJkr494j2hDoR",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        1380
+      ],
+      "id": "4d0a8f9f-7223-4f5e-8db7-eebef5a4c671",
+      "name": "SearchRouterAndCommand3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['#', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        1380
+      ],
+      "id": "c8a32184-0767-4fe3-9ac3-d37aa6f6fe24",
+      "name": "Chuyển sang table text"
+    },
+    {
+      "parameters": {
+        "content": "## GET ROUTER INTERFACE\n",
+        "height": 340,
+        "width": 1800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        1260
+      ],
+      "typeVersion": 1,
+      "id": "8ce296e1-17ab-4700-ad55-02a08b839df6",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "M6onsRnx1ZQY0ZXU",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        1380
+      ],
+      "id": "074e8333-262c-4c12-bcb7-2964908f47bb",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sF1tJkr494j2hDoR",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -260,
+        1800
+      ],
+      "id": "c1245c6c-0138-406e-b0ed-16b0b52b1492",
+      "name": "SearchRouterAndCommand4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['#', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        1800
+      ],
+      "id": "315422a8-4445-46aa-922a-417b4298e7af",
+      "name": "Chuyển sang table text1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "M6onsRnx1ZQY0ZXU",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        1800
+      ],
+      "id": "771dbafb-0f67-4142-8023-14dc6980f038",
+      "name": "Execute Workflow1"
+    },
+    {
+      "parameters": {
+        "content": "## GET OPTICAL POWER",
+        "height": 340,
+        "width": 1800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        1680
+      ],
+      "typeVersion": 1,
+      "id": "90647c79-1b27-4abf-903c-f1c93e66ca75",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "M6onsRnx1ZQY0ZXU",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        20,
+        960
+      ],
+      "id": "7e9e6526-90e4-4f6e-bc9f-ff54b6a80c78",
+      "name": "Execute Workflow2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "yxYwsfUnRlWd62uy",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        1800
+      ],
+      "id": "a5fa9593-550e-45b4-94ce-06b03fe274b5",
+      "name": "SummaryAndFile"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "yxYwsfUnRlWd62uy",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        1380
+      ],
+      "id": "eb099838-bce8-4c09-9e8c-5c6efa239dee",
+      "name": "SummaryAndFile1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "yxYwsfUnRlWd62uy",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        960
+      ],
+      "id": "db967814-dce5-48f0-8e90-dbf60e4c9924",
+      "name": "SummaryAndFile2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "sF1tJkr494j2hDoR",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -260,
+        2300
+      ],
+      "id": "578bbe02-7284-457a-aeb3-c6b33de9ac6d",
+      "name": "SearchRouterAndCommand5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['#', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        2300
+      ],
+      "id": "276a9201-c6d4-4721-baa5-478c50cd7d08",
+      "name": "Chuyển sang table text2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "M6onsRnx1ZQY0ZXU",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        2300
+      ],
+      "id": "c8584447-7819-4d8e-89a1-7089d8f13772",
+      "name": "Execute Workflow3"
+    },
+    {
+      "parameters": {
+        "content": "## GET HARDWARE INFO",
+        "height": 340,
+        "width": 1800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        2140
+      ],
+      "typeVersion": 1,
+      "id": "62b7dd13-914f-425c-9cdc-fa41592a58da",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "yxYwsfUnRlWd62uy",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        460,
+        2300
+      ],
+      "id": "3fa69b4c-41bd-4253-a5fc-dfd4803ceea9",
+      "name": "SummaryAndFile3"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "M6onsRnx1ZQY0ZXU",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        220
+      ],
+      "id": "c51ca44d-234f-4eba-8360-63e72a74e2a0",
+      "name": "Execute Workflow4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.first().json.parsedData; // Giả sử stdout chứa JSON\n\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'No data to display';\n  }\n\n  // Headers: STT (dựa trên index) và các key từ object JSON\n  const headers = ['#', ...Object.keys(data[0])];\n  const keys = ['index', ...Object.keys(data[0])];\n\n  // Chuẩn bị rows\n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } else {\n      value = obj[key] ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(0); // Làm tròn số\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n\n  // Trả về bảng Markdown trong block code\n  return [{\n    json: {\n      text: tableText      \n    }\n  }];\n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`\n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        280,
+        220
+      ],
+      "id": "66b65ca1-0aa1-4572-bfae-6aa6f620b474",
+      "name": "Chuyển sang table text4"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "yxYwsfUnRlWd62uy",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        220
+      ],
+      "id": "26f6a1a0-a692-4cfb-82de-04669084c18d",
+      "name": "SummaryAndFile4"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MH0QrxyUfKHL6A4Z1Ghlj_4pUh0zk9kweC48Pl8-iMs/edit?gid=1038448833#gid=1038448833",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1038448833,
+          "mode": "list",
+          "cachedResultName": "Cáp_CT",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MH0QrxyUfKHL6A4Z1Ghlj_4pUh0zk9kweC48Pl8-iMs/edit#gid=1038448833"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Điểm đầu",
+              "lookupValue": "={{ $json.command.options[0].value }}"
+            },
+            {
+              "lookupColumn": "Điểm cuối",
+              "lookupValue": "={{ $json.command.options[0].value }}"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -180,
+        2680
+      ],
+      "id": "50901f78-a61b-40da-b939-61cf659239a5",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "819e8151-dcb8-48c6-9639-5863eb94fade",
+              "name": "Tuyến cáp",
+              "value": "={{ $json[\"Tuyến cáp\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "0a0ac98e-dbfe-4b49-8044-00ebcda98708",
+              "name": "Loại link",
+              "value": "={{ $json[\"Link 2\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "d99baeb3-b09a-4d09-9da8-41131619ddf6",
+              "name": "Loại cáp",
+              "value": "={{ $json[\"Loại cáp\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "8a74d610-619e-4686-a586-8c569a3b86d6",
+              "name": "Chiều dài cáp",
+              "value": "={{ $json[\"Chiều dài cáp\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "e090f695-dd9e-48c9-aa5a-b4d8f168bc36",
+              "name": "Chủ sở hữu",
+              "value": "Mobifone",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        40,
+        2680
+      ],
+      "id": "d0377962-3e76-4cc8-b837-b8179820e3ed",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonData = $input.all(); // Giả sử stdout chứa JSON\n// Hàm tạo bảng Markdown từ JSON\nfunction createMarkdownTable(data) {\n  if (!Array.isArray(data) || data.length === 0) {\n    return 'Không tìm thấy dữ liệu !';\n  }\n\n  const headers = ['#', ...Object.keys(data[0].json)];\n  const keys = ['index', ...Object.keys(data[0].json).map(key => `json.${key}`)];\n  \n  const rows = data.map((obj, index) => keys.map(key => {\n    let value;\n    if (key === 'index') {\n      value = index + 1; // STT bắt đầu từ 1\n    } \n    else {\n    if (key.startsWith('json.')) {\n      const subKey = key.split('.')[1];\n      value = obj.json[subKey] ?? '';\n    } else {\n      value = obj[key.split('.')[1]]?.item ?? '';\n    }\n    if (typeof value === 'number') {\n      value = value.toFixed(2); // Làm tròn số\n    }\n    }\n    return String(value).replace(/\\|/g, '\\\\|'); // Escape ký tự |\n  }));\n\n  // Tính độ rộng cột\n  const colWidths = headers.map((header, i) => \n    Math.max(header.length, ...rows.map(row => row[i].length))\n  );\n\n  // Tạo header\n  let table = `| ${headers.map((h, i) => h.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  table += `| ${colWidths.map(w => '-'.repeat(w)).join(' | ')} |\\n`;\n\n  // Tạo rows\n  rows.forEach(row => {\n    table += `| ${row.map((cell, i) => cell.padEnd(colWidths[i])).join(' | ')} |\\n`;\n  });\n\n  return table.trim();\n}\n\n// Hàm chia bảng thành các đoạn dựa trên \\n\nfunction splitText(text, maxLength) {\n  const lines = text.split('\\n');\n  const result = [];\n  let current = '';\n\n  for (let line of lines) {\n    const lineWithBreak = line + '\\n';\n    if (current.length + lineWithBreak.length <= maxLength) {\n      current += lineWithBreak;\n    } else {\n      if (current) result.push(current);\n      current = lineWithBreak;\n    }\n  }\n  if (current) result.push(current.trimEnd());\n  return result;\n}\n\ntry {\n  // Parse JSON nếu stdout là chuỗi\n  const parsedData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;\n  const tableText = createMarkdownTable(parsedData);\n  \n\n  // Kiểm tra kích thước file\n    return [{\n      json: {\n        text: tableText,\n        ...$input.first().json\n      }\n    }];\n \n} catch (error) {\n  return [{\n    json: {\n      text: `Lỗi: ${error.message}`     \n    }\n  }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        620,
+        2800
+      ],
+      "id": "d58d271b-6cf0-4234-9481-53a5a9004e75",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1020,
+        1800
+      ],
+      "id": "80bee619-9faa-4690-acf9-47600a940c46",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a818444-d71f-4ed8-ace0-5e85bba7ed9f",
+              "name": "output.summary",
+              "value": "={{ $json.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "14886ac0-5f13-4011-92eb-56a7b69a6945",
+              "name": "output.full_data",
+              "value": "={{ $json.full_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        680,
+        1800
+      ],
+      "id": "ab53fc5c-fa21-4d85-aee8-cc0c455e9c15",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a818444-d71f-4ed8-ace0-5e85bba7ed9f",
+              "name": "output.summary",
+              "value": "={{ $json.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "14886ac0-5f13-4011-92eb-56a7b69a6945",
+              "name": "output.full_data",
+              "value": "={{ $json.full_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        2300
+      ],
+      "id": "9a43273d-b21a-49d1-b2c4-de1ffcfc9268",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1020,
+        2300
+      ],
+      "id": "5984e5cb-50b3-4426-93d3-cc89701e2b60",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        1380
+      ],
+      "id": "63a762bc-79a3-4850-845f-b31e9a9a51ff",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a818444-d71f-4ed8-ace0-5e85bba7ed9f",
+              "name": "output.summary",
+              "value": "={{ $json.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "14886ac0-5f13-4011-92eb-56a7b69a6945",
+              "name": "output.full_data",
+              "value": "={{ $json.full_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        780,
+        1380
+      ],
+      "id": "11c98cbe-d725-4cc4-83b3-74c4973fe62b",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1140,
+        960
+      ],
+      "id": "f1ef23ca-731b-4af9-8750-cfc838b523b8",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a818444-d71f-4ed8-ace0-5e85bba7ed9f",
+              "name": "output.summary",
+              "value": "={{ $json.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "14886ac0-5f13-4011-92eb-56a7b69a6945",
+              "name": "output.full_data",
+              "value": "={{ $json.full_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        960
+      ],
+      "id": "f4a43567-f086-4ad6-b3ed-a426dd1c4e4a",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14886ac0-5f13-4011-92eb-56a7b69a6945",
+              "name": "output.full_data",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        2800
+      ],
+      "id": "7c78528e-5b02-4d13-a5ed-34899650be58",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1160,
+        2800
+      ],
+      "id": "be3998f0-16aa-4e12-9427-e304ca2cfd0d",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "14886ac0-5f13-4011-92eb-56a7b69a6945",
+              "name": "output.full_data",
+              "value": "=```{{ $json.stdout}}```",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        560
+      ],
+      "id": "eab74e71-c2a7-4659-8dae-c64f0e519a95",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        540,
+        560
+      ],
+      "id": "c2e7cf32-f5fa-4932-9aee-ae5760a11ef2",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "content": "## GET FO",
+        "height": 540,
+        "width": 1820
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        2560
+      ],
+      "typeVersion": 1,
+      "id": "059cd535-6622-4e97-b0c7-76a41e0f8969",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.3,
+      "position": [
+        1220,
+        220
+      ],
+      "id": "3016c0aa-35c9-4397-9516-3c26f0dbbb37",
+      "name": "Respond to Webhook6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4a818444-d71f-4ed8-ace0-5e85bba7ed9f",
+              "name": "output.summary",
+              "value": "={{ $json.summary }}",
+              "type": "string"
+            },
+            {
+              "id": "14886ac0-5f13-4011-92eb-56a7b69a6945",
+              "name": "output.full_data",
+              "value": "={{ $json.full_data }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        220
+      ],
+      "id": "1611158e-6544-4d39-af4f-6add95a8a1c9",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1CeICreaPUB7TRfZk6bUpEhigccqnQJMo6W7gaULGVN0",
+          "mode": "list",
+          "cachedResultName": "Cáp thuê FO tháng 7 2025",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1CeICreaPUB7TRfZk6bUpEhigccqnQJMo6W7gaULGVN0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Chi tiết cáp thuê",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1CeICreaPUB7TRfZk6bUpEhigccqnQJMo6W7gaULGVN0/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Điểm đầu",
+              "lookupValue": "={{ $json.command.options[0].value }}"
+            },
+            {
+              "lookupColumn": "Điểm cuối",
+              "lookupValue": "={{ $json.command.options[0].value }}"
+            }
+          ]
+        },
+        "combineFilters": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -180,
+        2920
+      ],
+      "id": "a04bf653-7068-4e04-9f6c-84f64bcde1f5",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KlMsI8k1J5rgdCul",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "819e8151-dcb8-48c6-9639-5863eb94fade",
+              "name": "Tuyến cáp",
+              "value": "={{ $json[\"Tuyến cáp\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "0a0ac98e-dbfe-4b49-8044-00ebcda98708",
+              "name": "Loại link",
+              "value": "={{ $json[\"Loại link\"] }}",
+              "type": "string"
+            },
+            {
+              "id": "d99baeb3-b09a-4d09-9da8-41131619ddf6",
+              "name": "Loại cáp",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "8a74d610-619e-4686-a586-8c569a3b86d6",
+              "name": "Chiều dài cáp",
+              "value": "={{ $json[\"Số KM/tuyến\"] }}",
+              "type": "number"
+            },
+            {
+              "id": "e090f695-dd9e-48c9-aa5a-b4d8f168bc36",
+              "name": "Chủ sở hữu",
+              "value": "={{ $json[\"Đối tác\"] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        40,
+        2920
+      ],
+      "id": "8b790f1c-53a7-439e-b239-6e88333ae6e7",
+      "name": "Edit Fields10"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        340,
+        2800
+      ],
+      "id": "43757b13-0a72-4711-8840-04f30f19235c",
+      "name": "Merge"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "InputSet": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "InputSet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchRouterAndCommand": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [],
+        [
+          {
+            "node": "SearchRouterAndCommand",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SearchRouterAndCommand1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SearchRouterAndCommand2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SearchRouterAndCommand3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SearchRouterAndCommand4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SearchRouterAndCommand5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ping test": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchRouterAndCommand1": {
+      "main": [
+        [
+          {
+            "node": "Ping test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchRouterAndCommand2": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text3": {
+      "main": [
+        [
+          {
+            "node": "SummaryAndFile2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchRouterAndCommand3": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text": {
+      "main": [
+        [
+          {
+            "node": "SummaryAndFile1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchRouterAndCommand4": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text1": {
+      "main": [
+        [
+          {
+            "node": "SummaryAndFile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow1": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow2": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SummaryAndFile": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SummaryAndFile1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SummaryAndFile2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SearchRouterAndCommand5": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text2": {
+      "main": [
+        [
+          {
+            "node": "SummaryAndFile3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow3": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SummaryAndFile3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuyển sang table text4": {
+      "main": [
+        [
+          {
+            "node": "SummaryAndFile4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SummaryAndFile4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow4": {
+      "main": [
+        [
+          {
+            "node": "Chuyển sang table text4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "54abbb85-c728-44a2-b46a-e7b374e2166c",
+  "meta": {
+    "instanceId": "fed535408ed45d741f945d1aea32a1746e2ccd7038d300e0e52b3dfdfc1d0d01"
+  },
+  "id": "np5dSsFixZOJhy5t",
+  "tags": []
+}
